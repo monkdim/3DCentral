@@ -1,0 +1,479 @@
+/* Filament Manager — Module Styles */
+
+/* ---- Slot Map Grid ---- */
+
+.fil-slotmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1100px) {
+  .fil-slotmap-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .fil-slotmap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* AMS/Ace unit card */
+.fil-unit-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.fil-unit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.fil-unit-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fil-unit-printer {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.fil-unit-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  padding: 12px;
+  gap: 10px;
+}
+
+/* Individual slot */
+.fil-slot {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 110px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.fil-slot:hover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.fil-slot-number {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.fil-slot-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fil-slot-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.fil-slot-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.fil-slot-material {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fil-slot-brand {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fil-slot-remaining {
+  margin-top: auto;
+}
+
+.fil-slot-pct {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.fil-slot .progress-bar {
+  height: 5px;
+}
+
+/* Empty slot */
+.fil-slot-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  min-height: 110px;
+}
+
+.fil-slot-empty-icon {
+  font-size: 22px;
+  opacity: 0.4;
+}
+
+.fil-slot-empty-text {
+  font-size: 11px;
+}
+
+/* Slot progress colors */
+.fil-progress-good .progress-fill {
+  background: var(--success);
+}
+
+.fil-progress-mid .progress-fill {
+  background: var(--accent);
+}
+
+.fil-progress-low .progress-fill {
+  background: var(--warning);
+}
+
+.fil-progress-critical .progress-fill {
+  background: var(--danger);
+}
+
+
+/* ---- Inventory Table ---- */
+
+.fil-inv-toolbar {
+  flex-wrap: wrap;
+}
+
+#fil-inv-table .fil-inv-color-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#fil-inv-table .fil-inv-remaining-cell {
+  min-width: 140px;
+}
+
+.fil-inv-remaining-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fil-inv-remaining-bar .progress-bar {
+  flex: 1;
+  height: 6px;
+}
+
+.fil-inv-remaining-bar .fil-inv-pct {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+.fil-inv-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* Low warnings banner */
+.fil-low-warning-banner {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--warning);
+}
+
+.fil-low-warning-banner .fil-warn-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.fil-low-warning-banner .fil-warn-text {
+  flex: 1;
+}
+
+/* ---- Cost Dashboard ---- */
+
+#fil-cost-summary .card {
+  text-align: center;
+  padding: 18px 14px;
+}
+
+#fil-cost-summary .stat-value {
+  font-size: 24px;
+}
+
+#fil-cost-summary .stat-label {
+  margin-bottom: 4px;
+}
+
+
+/* ---- Materials Reference ---- */
+
+.fil-materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.fil-mat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  transition: border-color 0.15s ease;
+}
+
+.fil-mat-card:hover {
+  border-color: var(--accent);
+}
+
+.fil-mat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.fil-mat-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.fil-mat-fullname {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.fil-mat-difficulty {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fil-mat-difficulty-easy {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.fil-mat-difficulty-moderate {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.fil-mat-difficulty-hard {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.fil-mat-difficulty-expert {
+  background: rgba(156, 39, 176, 0.15);
+  color: #ce93d8;
+}
+
+.fil-mat-props {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+  margin-bottom: 12px;
+}
+
+.fil-mat-prop {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.fil-mat-prop-label {
+  color: var(--text-muted);
+}
+
+.fil-mat-prop-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: right;
+}
+
+.fil-mat-temps {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.fil-mat-temp {
+  flex: 1;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.fil-mat-temp-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fil-mat-temp-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.fil-mat-notes {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.fil-mat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+
+/* ---- Wishlist ---- */
+
+.fil-wishlist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.15s ease;
+}
+
+.fil-wishlist-item:hover {
+  border-color: var(--accent);
+}
+
+.fil-wish-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.fil-wish-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fil-wish-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.fil-wish-meta a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.fil-wish-meta a:hover {
+  text-decoration: underline;
+}
+
+.fil-wish-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+
+/* ---- Modal overrides ---- */
+
+#fil-spool-modal .form-row {
+  flex-wrap: wrap;
+}
+
+/* Color picker alignment */
+#fil-form-colorhex {
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ---- Responsive tweaks ---- */
+
+@media (max-width: 900px) {
+  #fil-cost-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  #fil-cost-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .fil-materials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fil-unit-slots {
+    grid-template-columns: 1fr;
+  }
+}

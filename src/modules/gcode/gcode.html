@@ -1,0 +1,456 @@
+<!-- G-code Toolkit Module -->
+<div id="gcode-module">
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">G-code Toolkit</h2>
+      <p class="text-sm text-muted">Analyze, modify, and optimize G-code files for your printers</p>
+    </div>
+    <div class="flex items-center gap-sm">
+      <span class="tag" id="gc-file-badge" style="display:none;">
+        <span id="gc-file-badge-name"></span>
+      </span>
+      <button class="btn btn-secondary btn-sm" id="gc-btn-open-file">Open G-code File</button>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="gc-tab-bar">
+    <button class="tab-btn active" data-tab="gc-tab-analyzer">Analyzer</button>
+    <button class="tab-btn" data-tab="gc-tab-postproc">Post-Processor</button>
+    <button class="tab-btn" data-tab="gc-tab-templates">Templates</button>
+  </div>
+
+  <!-- ========== TAB: Analyzer ========== -->
+  <div class="tab-panel active" id="gc-tab-analyzer">
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="gc-drop-zone">
+      <div class="drop-zone-icon">&#x1F4C4;</div>
+      <div style="font-size:15px; font-weight:600; margin-bottom:4px;">Drop a .gcode file here</div>
+      <div class="text-sm text-muted">or click to browse. Supports .gcode and .gco files.</div>
+    </div>
+
+    <!-- Analysis results (hidden until file loaded) -->
+    <div id="gc-analysis-results" style="display:none;">
+
+      <!-- File summary -->
+      <div class="card" id="gc-file-summary">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="gc-summary-filename">filename.gcode</div>
+            <div class="card-subtitle" id="gc-summary-meta">--</div>
+          </div>
+          <button class="btn btn-sm btn-secondary" id="gc-btn-clear-file">Clear</button>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="gc-stats-grid">
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x23F1;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-time">--</div>
+            <div class="stat-label">Est. Print Time</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x1F9F5;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-filament">--</div>
+            <div class="stat-label">Filament Usage</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x1F4DA;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-layers">--</div>
+            <div class="stat-label">Layer Count</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x2195;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-layer-height">--</div>
+            <div class="stat-label">Layer Height</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x1F4D0;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-dimensions">--</div>
+            <div class="stat-label">Dimensions (mm)</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x1F321;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-temps">--</div>
+            <div class="stat-label">Nozzle / Bed Temp</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x26A1;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-speed">--</div>
+            <div class="stat-label">Max Speed (mm/s)</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x21BA;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-retractions">--</div>
+            <div class="stat-label">Retraction Count</div>
+          </div>
+        </div>
+        <div class="gc-stat-card">
+          <div class="gc-stat-icon">&#x2708;</div>
+          <div class="gc-stat-info">
+            <div class="stat-value gc-stat-val" id="gc-stat-travel">--</div>
+            <div class="stat-label">Travel Distance</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Red flag warnings -->
+      <div id="gc-warnings-area" style="display:none;">
+        <h3 style="font-size:14px; font-weight:600; margin-bottom:10px;">Warnings &amp; Red Flags</h3>
+        <div id="gc-warnings-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== TAB: Post-Processor ========== -->
+  <div class="tab-panel" id="gc-tab-postproc">
+
+    <!-- No file notice -->
+    <div id="gc-pp-no-file" class="empty-state">
+      <div class="empty-state-icon">&#x1F6E0;</div>
+      <div class="empty-state-title">No G-code loaded</div>
+      <div class="empty-state-text">Load a .gcode file from the Analyzer tab first, then come back here to modify it.</div>
+    </div>
+
+    <!-- Post-processor controls (hidden until file loaded) -->
+    <div id="gc-pp-controls" style="display:none;">
+
+      <!-- Printer selection -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Target Printer</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <select class="form-select" id="gc-pp-printer">
+            <option value="bambu_a1">Bambu Lab A1 Combo</option>
+            <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Auto-Eject Sequences -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Auto-Eject Sequences</div>
+            <div class="card-subtitle">Append end G-code to automatically release prints from the bed</div>
+          </div>
+        </div>
+
+        <!-- Cool & Release -->
+        <div class="gc-pp-option">
+          <div class="gc-pp-option-header">
+            <label class="form-checkbox">
+              <input type="checkbox" id="gc-eject-cool">
+              <span>Cool &amp; Release</span>
+            </label>
+            <span class="tag tag-success">Gentle</span>
+          </div>
+          <div class="gc-pp-option-body" id="gc-eject-cool-opts">
+            <p class="text-sm text-muted mb-sm">Gradually cools the bed to a target temperature, then waits for the part to release naturally.</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Target Temp (&deg;C)</label>
+                <input type="number" class="form-input" id="gc-cool-target-temp" value="30" min="20" max="60">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Wait Time (seconds)</label>
+                <input type="number" class="form-input" id="gc-cool-wait-time" value="60" min="10" max="600">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bed Shake -->
+        <div class="gc-pp-option">
+          <div class="gc-pp-option-header">
+            <label class="form-checkbox">
+              <input type="checkbox" id="gc-eject-shake">
+              <span>Bed Shake</span>
+            </label>
+            <span class="tag tag-warning">Moderate</span>
+          </div>
+          <div class="gc-pp-option-body" id="gc-eject-shake-opts">
+            <p class="text-sm text-muted mb-sm">Rapid Y-axis vibrations to help dislodge the print from the bed surface.</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Shake Distance (mm)</label>
+                <input type="number" class="form-input" id="gc-shake-distance" value="2" min="1" max="10" step="0.5">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Shake Speed (mm/min)</label>
+                <input type="number" class="form-input" id="gc-shake-speed" value="3000" min="1000" max="6000" step="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Repetitions</label>
+                <input type="number" class="form-input" id="gc-shake-reps" value="10" min="3" max="50">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Push-Off -->
+        <div class="gc-pp-option">
+          <div class="gc-pp-option-header">
+            <label class="form-checkbox">
+              <input type="checkbox" id="gc-eject-push">
+              <span>Push-Off</span>
+            </label>
+            <span class="tag tag-danger">Aggressive</span>
+          </div>
+          <div class="gc-pp-option-body" id="gc-eject-push-opts">
+            <p class="text-sm text-muted mb-sm">Moves the nozzle to the part edge and slowly pushes the print off the bed.</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Push Distance (mm)</label>
+                <input type="number" class="form-input" id="gc-push-distance" value="30" min="5" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Push Speed (mm/min)</label>
+                <input type="number" class="form-input" id="gc-push-speed" value="300" min="100" max="1000" step="50">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer Pause Insertion -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Layer Pause Insertion</div>
+            <div class="card-subtitle">Insert a pause at a specific layer for filament changes, inspections, or inserts</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Pause at Layer #</label>
+            <input type="number" class="form-input" id="gc-pause-layer" placeholder="e.g. 25" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pause Command</label>
+            <select class="form-select" id="gc-pause-command">
+              <option value="M0">M0 (Unconditional Stop)</option>
+              <option value="M600">M600 (Filament Change)</option>
+              <option value="custom">Custom G-code</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="gc-pause-custom-group" style="display:none;">
+          <label class="form-label">Custom Pause G-code</label>
+          <textarea class="form-textarea" id="gc-pause-custom-gcode" rows="3" placeholder="M0 ; Pause for user\nG4 S5 ; Wait 5 seconds" style="font-family:var(--font-mono); font-size:12px;"></textarea>
+        </div>
+        <button class="btn btn-sm btn-secondary" id="gc-btn-add-pause">+ Add Layer Pause</button>
+        <div id="gc-pause-list" class="mt-sm"></div>
+      </div>
+
+      <!-- Speed Override -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Speed Override</div>
+            <div class="card-subtitle">Scale all feed rate (F) values by a percentage</div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;">
+          <div class="flex items-center justify-between mb-sm">
+            <label class="form-label" style="margin-bottom:0;">Speed Multiplier</label>
+            <span class="tag" id="gc-speed-value-tag">100%</span>
+          </div>
+          <input type="range" class="range-slider" id="gc-speed-slider" min="50" max="200" value="100" step="5">
+          <div class="flex justify-between text-sm text-muted" style="margin-top:4px;">
+            <span>50%</span>
+            <span>100%</span>
+            <span>200%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperature Tweak -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Temperature Tweak</div>
+            <div class="card-subtitle">Apply offset to all temperature commands in the file</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nozzle Offset (&deg;C)</label>
+            <input type="number" class="form-input" id="gc-temp-nozzle-offset" value="0" min="-30" max="30" step="1">
+            <span class="text-sm text-muted">Adjusts M104/M109 values</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bed Offset (&deg;C)</label>
+            <input type="number" class="form-input" id="gc-temp-bed-offset" value="0" min="-20" max="20" step="1">
+            <span class="text-sm text-muted">Adjusts M140/M190 values</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fan Control Override -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Fan Control Override</div>
+            <div class="card-subtitle">Override all fan speed (M106) values</div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;">
+          <div class="flex items-center justify-between mb-sm">
+            <label class="form-label" style="margin-bottom:0;">Fan Speed</label>
+            <span class="tag" id="gc-fan-value-tag">100%</span>
+          </div>
+          <input type="range" class="range-slider" id="gc-fan-slider" min="0" max="100" value="100" step="5">
+          <div class="flex justify-between text-sm text-muted" style="margin-top:4px;">
+            <span>Off</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom G-code Injection -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Custom G-code Injection</div>
+            <div class="card-subtitle">Insert arbitrary G-code at a specific line or layer number</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Insert At</label>
+            <select class="form-select" id="gc-inject-mode">
+              <option value="layer">Layer Number</option>
+              <option value="line">Line Number</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Number</label>
+            <input type="number" class="form-input" id="gc-inject-number" placeholder="e.g. 10" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">G-code to Insert</label>
+          <textarea class="form-textarea" id="gc-inject-gcode" rows="3" placeholder="G1 X100 Y100 F3000\nM400" style="font-family:var(--font-mono); font-size:12px;"></textarea>
+        </div>
+        <button class="btn btn-sm btn-secondary" id="gc-btn-add-injection">+ Add Injection</button>
+        <div id="gc-injection-list" class="mt-sm"></div>
+      </div>
+
+      <!-- Apply & Download -->
+      <div class="card gc-pp-apply-card">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="card-title">Apply Modifications</div>
+            <div class="card-subtitle" id="gc-pp-mod-summary">No modifications configured</div>
+          </div>
+          <button class="btn btn-primary" id="gc-btn-apply-download">Apply &amp; Download</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== TAB: Templates ========== -->
+  <div class="tab-panel" id="gc-tab-templates">
+
+    <div class="flex items-center justify-between mb-md">
+      <div>
+        <p class="text-sm text-muted">Reusable end G-code templates for different printers and use cases.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" id="gc-btn-new-template">+ New Template</button>
+    </div>
+
+    <!-- Template list -->
+    <div id="gc-template-list">
+      <!-- Rendered by JS -->
+    </div>
+    <div id="gc-template-empty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">&#x1F4CB;</div>
+      <div class="empty-state-title">No templates yet</div>
+      <div class="empty-state-text">Create your first end G-code template, or use the built-in defaults.</div>
+    </div>
+
+    <!-- Template form (create/edit) -->
+    <div class="modal-overlay" id="gc-template-modal">
+      <div class="modal" style="max-width:700px;">
+        <div class="modal-header">
+          <div class="modal-title" id="gc-tpl-modal-title">New Template</div>
+          <button class="modal-close" id="gc-tpl-modal-close">&times;</button>
+        </div>
+
+        <form id="gc-template-form" autocomplete="off">
+          <input type="hidden" id="gc-tpl-form-id">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Template Name</label>
+              <input type="text" class="form-input" id="gc-tpl-form-name" placeholder="e.g. PLA Cool Release" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Printer</label>
+              <select class="form-select" id="gc-tpl-form-printer" required>
+                <option value="">Select printer...</option>
+                <option value="bambu_a1">Bambu Lab A1 Combo</option>
+                <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+                <option value="generic">Generic / Universal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Purpose Tag</label>
+            <select class="form-select" id="gc-tpl-form-purpose">
+              <option value="end-gcode">End G-code</option>
+              <option value="start-gcode">Start G-code</option>
+              <option value="pause-gcode">Pause G-code</option>
+              <option value="filament-change">Filament Change</option>
+              <option value="auto-eject">Auto-Eject</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">G-code Content</label>
+            <textarea class="form-textarea" id="gc-tpl-form-gcode" rows="12" placeholder="; End G-code template&#10;M104 S0 ; Turn off nozzle&#10;M140 S0 ; Turn off bed&#10;G91 ; Relative positioning&#10;G1 Z10 F3000 ; Lift nozzle&#10;G90 ; Absolute positioning&#10;G28 X ; Home X" required style="font-family:var(--font-mono); font-size:12px;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notes (optional)</label>
+            <input type="text" class="form-input" id="gc-tpl-form-notes" placeholder="When to use this template...">
+          </div>
+        </form>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="gc-tpl-modal-cancel">Cancel</button>
+          <button class="btn btn-danger" id="gc-tpl-modal-delete" style="display:none;">Delete</button>
+          <button class="btn btn-primary" id="gc-tpl-modal-save">Save Template</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

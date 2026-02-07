@@ -1,0 +1,1028 @@
+/* Design Workshop — Module Styles */
+
+/* ================================================================
+   PART GENERATOR — Template Cards & Parameter Form
+   ================================================================ */
+
+/* Template selection grid */
+.ws-template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 18px;
+  cursor: default;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ws-template-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.ws-template-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.ws-template-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.ws-template-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.ws-template-btn {
+  align-self: center;
+}
+
+/* Workspace layout: form | preview side by side */
+.ws-workspace {
+  /* shown/hidden via .hidden class */
+}
+
+.ws-partgen-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  min-height: 320px;
+}
+
+@media (max-width: 900px) {
+  .ws-partgen-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Parameter form area */
+.ws-partgen-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ws-param-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.ws-param-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.ws-param-range-info {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.ws-param-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ws-param-input-row .form-input {
+  flex: 1;
+}
+
+.ws-param-input-row .range-slider {
+  flex: 2;
+}
+
+.ws-param-unit {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 28px;
+}
+
+/* Preview area */
+.ws-partgen-preview {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ws-preview-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 20px;
+  position: relative;
+}
+
+.ws-preview-placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.ws-preview-placeholder-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+/* SVG preview inside the container */
+.ws-preview-svg {
+  width: 100%;
+  height: 100%;
+  max-height: 280px;
+}
+
+/* Dimension readout below preview */
+.ws-preview-dimensions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-input);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ws-dim-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ws-dim-label {
+  color: var(--text-muted);
+}
+
+.ws-dim-value {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Action bar */
+.ws-partgen-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+
+/* ================================================================
+   DESIGN RULES — Educational illustrations & content
+   ================================================================ */
+
+.ws-rule-card {
+  margin-bottom: 20px;
+}
+
+.ws-rule-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .ws-rule-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ws-rule-visual {
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.ws-rule-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.ws-rule-text p {
+  margin-bottom: 10px;
+}
+
+.ws-rule-text strong {
+  color: var(--text-primary);
+}
+
+.ws-rule-list {
+  margin: 8px 0 8px 20px;
+  padding: 0;
+}
+
+.ws-rule-list li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.ws-rule-table {
+  margin: 12px 0;
+  overflow-x: auto;
+}
+
+.ws-rule-table table {
+  font-size: 12px;
+}
+
+.ws-rule-table th {
+  font-size: 10px;
+  padding: 8px 10px;
+}
+
+.ws-rule-table td {
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+/* --- Wall thickness visual --- */
+
+.ws-wall-demo {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 20px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.ws-wall-sample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ws-wall-bar {
+  height: 80px;
+  background: var(--accent);
+  border-radius: 2px;
+  min-width: 3px;
+  transition: width 0.3s ease;
+}
+
+.ws-wall-bad .ws-wall-bar {
+  background: var(--danger);
+}
+
+.ws-wall-ok .ws-wall-bar {
+  background: var(--warning);
+}
+
+.ws-wall-good .ws-wall-bar {
+  background: var(--success);
+}
+
+.ws-wall-strong .ws-wall-bar {
+  background: var(--accent);
+}
+
+.ws-wall-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.ws-wall-verdict {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* --- Overhang angle visual --- */
+
+.ws-overhang-demo {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.ws-overhang-sample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.ws-overhang-svg {
+  width: 100%;
+  height: 80px;
+}
+
+.ws-overhang-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* --- Bridging visual --- */
+
+.ws-bridge-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.ws-bridge-sample {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  position: relative;
+  height: 50px;
+}
+
+.ws-bridge-pillar {
+  width: 12px;
+  height: 40px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+  flex-shrink: 0;
+}
+
+.ws-bridge-span {
+  height: 6px;
+  align-self: flex-start;
+  margin-top: 0;
+  border-radius: 1px;
+  position: relative;
+}
+
+.ws-bridge-short {
+  width: 40px;
+  background: var(--success);
+}
+
+.ws-bridge-medium {
+  width: 80px;
+  background: var(--warning);
+  /* subtle sag effect */
+  border-radius: 0;
+  clip-path: ellipse(50% 100% at 50% 0%);
+  height: 10px;
+}
+
+.ws-bridge-long {
+  width: 130px;
+  background: var(--danger);
+  clip-path: ellipse(50% 100% at 50% 0%);
+  height: 16px;
+}
+
+.ws-bridge-label {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* --- Tolerance visual --- */
+
+.ws-tolerance-demo {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.ws-tolerance-sample {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ws-tol-outer {
+  width: 56px;
+  height: 56px;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-tol-inner {
+  border-radius: 50%;
+  background: var(--text-accent);
+}
+
+.ws-tol-press {
+  width: 44px;
+  height: 44px;
+}
+
+.ws-tol-slide {
+  width: 38px;
+  height: 38px;
+}
+
+.ws-tol-loose {
+  width: 30px;
+  height: 30px;
+}
+
+.ws-tol-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* --- Orientation visual --- */
+
+.ws-orientation-demo {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.ws-orient-sample {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-orient-svg {
+  width: 80px;
+  height: 80px;
+}
+
+
+/* ================================================================
+   MEASURE HELPER — Wizard Steps
+   ================================================================ */
+
+/* Progress bar */
+.ws-wizard-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+  padding: 16px 0;
+}
+
+.ws-wizard-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.ws-wizard-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.ws-wizard-step.active .ws-wizard-step-num {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.ws-wizard-step.completed .ws-wizard-step-num {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+
+.ws-wizard-step-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.ws-wizard-step.active .ws-wizard-step-label {
+  color: var(--accent);
+}
+
+.ws-wizard-step.completed .ws-wizard-step-label {
+  color: var(--success);
+}
+
+.ws-wizard-step-line {
+  flex: 1;
+  max-width: 80px;
+  height: 2px;
+  background: var(--border);
+  margin: 0 8px;
+  margin-bottom: 18px;
+}
+
+/* Wizard panels */
+.ws-wizard-panel {
+  display: none;
+  animation: wsFadeIn 0.3s ease;
+}
+
+.ws-wizard-panel.active {
+  display: block;
+}
+
+@keyframes wsFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ws-wizard-panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.ws-wizard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Inner / outer dimension demo */
+.ws-inner-outer-demo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .ws-inner-outer-demo {
+    flex-direction: column;
+  }
+}
+
+.ws-io-box {
+  flex-shrink: 0;
+}
+
+.ws-io-outer {
+  width: 120px;
+  height: 80px;
+  border: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ws-io-label-outer {
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  background: var(--bg-secondary);
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.ws-io-inner {
+  width: 80px;
+  height: 48px;
+  border: 2px dashed var(--success);
+  border-radius: 3px;
+  position: relative;
+}
+
+.ws-io-label-inner {
+  position: absolute;
+  top: -10px;
+  left: 6px;
+  background: var(--bg-secondary);
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--success);
+  text-transform: uppercase;
+}
+
+.ws-io-text p {
+  margin-bottom: 6px;
+}
+
+/* Measurement checklist items */
+.ws-measure-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.ws-measure-item:hover {
+  border-color: var(--border-light);
+}
+
+.ws-measure-item.completed {
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+
+.ws-measure-check {
+  margin-top: 2px;
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.ws-measure-item-content {
+  flex: 1;
+}
+
+.ws-measure-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.ws-measure-item-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.ws-measure-item-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ws-measure-item-input .form-input {
+  width: 100px;
+}
+
+.ws-measure-item-input .ws-param-unit {
+  font-size: 12px;
+}
+
+/* Tolerance recommendation */
+.ws-tol-tip-card {
+  padding: 14px 18px;
+}
+
+/* Spec sheet output */
+.ws-spec-sheet {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.ws-spec-sheet .ws-spec-header {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-family: var(--font-main);
+}
+
+.ws-spec-sheet .ws-spec-section {
+  margin-bottom: 12px;
+}
+
+.ws-spec-sheet .ws-spec-section-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: var(--font-main);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.ws-spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.ws-spec-label {
+  color: var(--text-muted);
+}
+
+.ws-spec-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+
+/* ================================================================
+   STL FIX — Diagnostics & Repair
+   ================================================================ */
+
+/* Analyzing spinner */
+.ws-stl-analyzing {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.ws-stl-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: wsSpinnerRotate 0.8s linear infinite;
+}
+
+@keyframes wsSpinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Summary stats */
+.ws-stl-summary {
+  text-align: center;
+}
+
+.ws-stl-stat {
+  padding: 14px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.ws-stl-stat .stat-value {
+  font-size: 22px;
+}
+
+.ws-stl-stat .stat-label {
+  margin-top: 4px;
+}
+
+/* Diagnostic check rows */
+.ws-stl-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ws-stl-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease;
+}
+
+.ws-stl-check.pass {
+  border-left: 3px solid var(--success);
+}
+
+.ws-stl-check.warn {
+  border-left: 3px solid var(--warning);
+}
+
+.ws-stl-check.fail {
+  border-left: 3px solid var(--danger);
+}
+
+.ws-stl-check-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.ws-stl-check-info {
+  flex: 1;
+}
+
+.ws-stl-check-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ws-stl-check-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.ws-stl-check-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: right;
+}
+
+.ws-stl-check.pass .ws-stl-check-value { color: var(--success); }
+.ws-stl-check.warn .ws-stl-check-value { color: var(--warning); }
+.ws-stl-check.fail .ws-stl-check-value { color: var(--danger); }
+
+/* Repair stats */
+.ws-stl-repair-stats .card {
+  padding: 14px 18px;
+}
+
+
+/* ================================================================
+   CAD LINKS — Tool Cards
+   ================================================================ */
+
+.ws-cad-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.ws-cad-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ws-cad-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ws-cad-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ws-cad-maker {
+  line-height: 1.3;
+}
+
+.ws-cad-header .tag {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.ws-cad-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.ws-cad-tips {
+  margin-bottom: 12px;
+}
+
+.ws-cad-tips-title,
+.ws-cad-projects-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.ws-cad-tips-list {
+  margin: 0 0 0 16px;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.ws-cad-tips-list li {
+  margin-bottom: 3px;
+}
+
+.ws-cad-projects {
+  margin-bottom: 16px;
+}
+
+.ws-cad-project-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ws-cad-link {
+  margin-top: auto;
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+@media (max-width: 1000px) {
+  #ws-template-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #ws-cad-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  #ws-template-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ws-overhang-demo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ws-tolerance-demo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ws-wizard-progress {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ws-wizard-step-line {
+    display: none;
+  }
+
+  .ws-stl-summary {
+    grid-template-columns: 1fr;
+  }
+}

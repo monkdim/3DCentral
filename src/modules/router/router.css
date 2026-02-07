@@ -1,0 +1,468 @@
+/* Print Router Module — Styles */
+
+/* ---- Priority Sliders ---- */
+
+.rtr-priorities-section {
+  margin-bottom: 14px;
+}
+
+.rtr-slider-group {
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.rtr-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.rtr-slider-label-left,
+.rtr-slider-label-right {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.rtr-slider-label-left {
+  color: var(--accent);
+}
+
+.rtr-slider-label-right {
+  color: var(--success);
+}
+
+.rtr-slider-value {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ---- Requirements Checkbox Grid ---- */
+
+.rtr-requirements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+  padding: 10px 0;
+}
+
+.rtr-requirements-grid .form-checkbox {
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.rtr-requirements-grid .form-checkbox:hover {
+  border-color: var(--border-light);
+  background: var(--bg-hover);
+}
+
+.rtr-requirements-grid .form-checkbox:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ---- Recommendation Banner ---- */
+
+.rtr-recommendation-card {
+  border-left: 4px solid var(--accent);
+}
+
+.rtr-recommendation-card.rtr-rec-bambu {
+  border-left-color: #4ecdc4;
+}
+
+.rtr-recommendation-card.rtr-rec-kobra {
+  border-left-color: #f9a825;
+}
+
+.rtr-recommendation-card.rtr-rec-either {
+  border-left-color: var(--accent);
+}
+
+.rtr-recommendation-card.rtr-rec-neither {
+  border-left-color: var(--danger);
+}
+
+.rtr-rec-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rtr-rec-icon {
+  font-size: 36px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.rtr-rec-text {
+  flex: 1;
+}
+
+.rtr-rec-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.rtr-rec-printer {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rtr-rec-confidence {
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.rtr-confidence-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rtr-confidence-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--success);
+  line-height: 1.2;
+}
+
+.rtr-confidence-value.rtr-conf-high {
+  color: var(--success);
+}
+
+.rtr-confidence-value.rtr-conf-medium {
+  color: var(--warning);
+}
+
+.rtr-confidence-value.rtr-conf-low {
+  color: var(--danger);
+}
+
+/* Reasoning list */
+.rtr-rec-reasoning {
+  margin-bottom: 16px;
+}
+
+.rtr-reasoning-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rtr-reasoning-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.rtr-reasoning-icon {
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.rtr-reasoning-icon.rtr-reason-pro {
+  color: var(--success);
+}
+
+.rtr-reasoning-icon.rtr-reason-con {
+  color: var(--danger);
+}
+
+.rtr-reasoning-icon.rtr-reason-info {
+  color: var(--accent);
+}
+
+.rtr-reasoning-icon.rtr-reason-warn {
+  color: var(--warning);
+}
+
+.rtr-rec-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Side-by-Side Comparison Cards ---- */
+
+.rtr-compare-card {
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.rtr-compare-card.rtr-compare-recommended {
+  border-color: var(--success);
+  box-shadow: 0 0 16px rgba(78, 205, 196, 0.1);
+}
+
+.rtr-compare-card.rtr-compare-blocked {
+  border-color: var(--danger);
+  opacity: 0.7;
+}
+
+.rtr-compare-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rtr-compare-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Comparison body rows */
+.rtr-compare-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rtr-compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.rtr-compare-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.rtr-compare-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rtr-compare-value .rtr-check {
+  color: var(--success);
+  font-size: 15px;
+}
+
+.rtr-compare-value .rtr-cross {
+  color: var(--danger);
+  font-size: 15px;
+}
+
+.rtr-compare-value .rtr-warn {
+  color: var(--warning);
+  font-size: 15px;
+}
+
+/* Advantages / Limitations subsections */
+.rtr-compare-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.rtr-compare-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rtr-compare-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.rtr-compare-list li .icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.rtr-adv-list li .icon {
+  color: var(--success);
+}
+
+.rtr-lim-list li .icon {
+  color: var(--danger);
+}
+
+/* Score bar */
+.rtr-score-bar-container {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.rtr-score-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.rtr-score-bar {
+  height: 8px;
+  background: var(--bg-hover);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rtr-score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  background: var(--accent);
+}
+
+.rtr-score-fill.rtr-score-high {
+  background: var(--success);
+}
+
+.rtr-score-fill.rtr-score-medium {
+  background: var(--warning);
+}
+
+.rtr-score-fill.rtr-score-low {
+  background: var(--danger);
+}
+
+/* ---- Filament Availability List ---- */
+
+.rtr-filament-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.rtr-filament-row:last-child {
+  border-bottom: none;
+}
+
+.rtr-filament-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.rtr-filament-info {
+  flex: 1;
+}
+
+.rtr-filament-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rtr-filament-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rtr-filament-location {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ---- Past Prints History ---- */
+
+.rtr-history-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.rtr-history-row:last-child {
+  border-bottom: none;
+}
+
+.rtr-history-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.rtr-history-printer {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.rtr-history-material {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---- Printer Profile Config ---- */
+
+.rtr-profile-card {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.rtr-profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .rtr-requirements-grid {
+    grid-template-columns: 1fr;
+  }
+}

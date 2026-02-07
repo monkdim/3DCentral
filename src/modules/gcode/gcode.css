@@ -1,0 +1,323 @@
+/* G-code Toolkit — Module Styles */
+
+/* ---- Analyzer Stats Grid ---- */
+
+.gc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.gc-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.gc-stat-card:hover {
+  border-color: var(--accent);
+}
+
+.gc-stat-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.gc-stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.gc-stat-val {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1100px) {
+  .gc-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .gc-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---- Warning Cards ---- */
+
+.gc-warning-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.gc-warning-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.gc-warning-text {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.gc-warning-card.gc-warn-error {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+}
+
+.gc-warning-card.gc-warn-error .gc-warning-icon {
+  color: var(--danger);
+}
+
+.gc-warning-card.gc-warn-warning {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning);
+}
+
+.gc-warning-card.gc-warn-warning .gc-warning-icon {
+  color: var(--warning);
+}
+
+.gc-warning-card.gc-warn-info {
+  background: rgba(126, 200, 227, 0.1);
+  border: 1px solid var(--info);
+}
+
+.gc-warning-card.gc-warn-info .gc-warning-icon {
+  color: var(--info);
+}
+
+
+/* ---- Drop Zone File-Loaded State ---- */
+
+#gc-drop-zone.gc-has-file {
+  border-color: var(--success);
+  background: var(--success-bg);
+  color: var(--success);
+  cursor: default;
+}
+
+
+/* ---- Post-Processor Option Panels ---- */
+
+.gc-pp-option {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.gc-pp-option:last-child {
+  margin-bottom: 0;
+}
+
+.gc-pp-option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+}
+
+.gc-pp-option-header .form-checkbox {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.gc-pp-option-body {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+
+.gc-pp-option-body.active {
+  display: block;
+}
+
+
+/* ---- Layer Pause / Injection List Items ---- */
+
+.gc-modifier-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.gc-modifier-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.gc-modifier-item-info .tag {
+  flex-shrink: 0;
+}
+
+.gc-modifier-item-text {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gc-modifier-item-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.gc-modifier-item-remove:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+
+/* ---- Apply Card ---- */
+
+.gc-pp-apply-card {
+  background: var(--bg-secondary);
+  border-color: var(--accent);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+
+/* ---- Template List Cards ---- */
+
+.gc-template-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.gc-template-card:hover {
+  border-color: var(--accent);
+}
+
+.gc-template-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.gc-template-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.gc-template-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.gc-template-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gc-template-card-preview {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.gc-template-card-notes {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+
+/* ---- Template Form Modal ---- */
+
+#gc-template-modal .form-textarea {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* ---- Responsive ---- */
+
+@media (max-width: 900px) {
+  .gc-pp-option .form-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .gc-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gc-template-card-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .gc-template-card-actions {
+    align-self: flex-end;
+  }
+}
