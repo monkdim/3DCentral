@@ -33,3 +33,13 @@ jobs:
         with:
           name: PrintHQ-Windows-Installer
           path: "dist/*.exe"
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v1.0.${{ github.run_number }}
+          name: PrintHQ v1.0.${{ github.run_number }}
+          artifacts: "dist/*.exe"
+          body: "Download the .exe below to install PrintHQ on Windows."
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
