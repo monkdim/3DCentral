@@ -1,0 +1,521 @@
+<!-- Strength & Settings Optimizer Module -->
+<div id="optimizer-module">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Strength &amp; Settings Optimizer</h2>
+      <p class="text-sm text-muted">Print profiles, strength estimation, settings comparison, and troubleshooting</p>
+    </div>
+    <button class="btn btn-primary" id="opt-btn-new-profile">+ New Profile</button>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar" id="opt-tab-bar">
+    <button class="tab-btn active" data-tab="opt-tab-profiles">Profiles</button>
+    <button class="tab-btn" data-tab="opt-tab-compare">Compare</button>
+    <button class="tab-btn" data-tab="opt-tab-strength">Strength</button>
+    <button class="tab-btn" data-tab="opt-tab-infill">Infill Guide</button>
+    <button class="tab-btn" data-tab="opt-tab-troubleshoot">Troubleshooter</button>
+  </div>
+
+  <!-- ========== TAB: Profiles ========== -->
+  <div class="tab-panel active" id="opt-tab-profiles">
+
+    <!-- Filter bar -->
+    <div class="flex items-center gap-sm mb-md">
+      <select class="form-select" id="opt-prof-filter-printer" style="width:180px;">
+        <option value="all">All Printers</option>
+        <option value="bambu_a1">Bambu Lab A1</option>
+        <option value="kobra_s1">Kobra S1</option>
+      </select>
+      <select class="form-select" id="opt-prof-filter-use" style="width:160px;">
+        <option value="all">All Use Cases</option>
+        <option value="structural">Structural</option>
+        <option value="fast">Fast Draft</option>
+        <option value="display">Display</option>
+        <option value="flexible">Flexible</option>
+        <option value="mechanical">Mechanical</option>
+        <option value="outdoor">Outdoor</option>
+      </select>
+      <input type="text" class="form-input" id="opt-prof-search" placeholder="Search profiles..." style="width:200px;">
+    </div>
+
+    <!-- Built-in Profiles Section -->
+    <h3 class="opt-section-label">Built-in Recipes</h3>
+    <div class="grid-3 mb-md" id="opt-builtin-grid">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- User Custom Profiles Section -->
+    <h3 class="opt-section-label">My Custom Profiles</h3>
+    <div class="grid-3 mb-md" id="opt-custom-grid">
+      <!-- Rendered by JS -->
+    </div>
+    <div id="opt-custom-empty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">&#x1F4CB;</div>
+      <div class="empty-state-title">No custom profiles yet</div>
+      <div class="empty-state-text">Create your first custom print profile to save your favorite settings.</div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Compare ========== -->
+  <div class="tab-panel" id="opt-tab-compare">
+    <p class="text-sm text-muted mb-md">Adjust settings with the sliders to see estimated impact on strength, print time, filament usage, and quality in real time.</p>
+
+    <div class="opt-compare-layout">
+      <!-- Left: Sliders -->
+      <div class="card opt-compare-controls">
+        <div class="card-title mb-md">Settings</div>
+
+        <div class="form-group">
+          <label class="form-label">Material</label>
+          <select class="form-select" id="opt-cmp-material">
+            <option value="PLA">PLA</option>
+            <option value="PLA+">PLA+</option>
+            <option value="PETG" selected>PETG</option>
+            <option value="TPU">TPU</option>
+            <option value="ABS">ABS</option>
+            <option value="ASA">ASA</option>
+            <option value="Nylon">Nylon</option>
+            <option value="PC">PC</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center justify-between">
+            <label class="form-label">Wall Count</label>
+            <span class="opt-slider-value" id="opt-cmp-walls-val">3</span>
+          </div>
+          <input type="range" class="range-slider" id="opt-cmp-walls" min="1" max="8" value="3" step="1">
+          <div class="opt-slider-labels"><span>1</span><span>8</span></div>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center justify-between">
+            <label class="form-label">Infill %</label>
+            <span class="opt-slider-value" id="opt-cmp-infill-val">20%</span>
+          </div>
+          <input type="range" class="range-slider" id="opt-cmp-infill" min="0" max="100" value="20" step="5">
+          <div class="opt-slider-labels"><span>0%</span><span>100%</span></div>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center justify-between">
+            <label class="form-label">Infill Pattern</label>
+          </div>
+          <select class="form-select" id="opt-cmp-pattern">
+            <option value="grid">Grid</option>
+            <option value="gyroid">Gyroid</option>
+            <option value="honeycomb">Honeycomb</option>
+            <option value="cubic">Cubic</option>
+            <option value="triangles">Triangles</option>
+            <option value="lines">Lines</option>
+            <option value="concentric">Concentric</option>
+            <option value="lightning">Lightning</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center justify-between">
+            <label class="form-label">Layer Height (mm)</label>
+            <span class="opt-slider-value" id="opt-cmp-layer-val">0.20</span>
+          </div>
+          <input type="range" class="range-slider" id="opt-cmp-layer" min="0.08" max="0.32" value="0.20" step="0.04">
+          <div class="opt-slider-labels"><span>0.08</span><span>0.32</span></div>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center justify-between">
+            <label class="form-label">Speed (mm/s)</label>
+            <span class="opt-slider-value" id="opt-cmp-speed-val">150</span>
+          </div>
+          <input type="range" class="range-slider" id="opt-cmp-speed" min="30" max="300" value="150" step="10">
+          <div class="opt-slider-labels"><span>30</span><span>300</span></div>
+        </div>
+      </div>
+
+      <!-- Right: Impact Meters -->
+      <div class="opt-compare-results">
+        <div class="card opt-impact-card">
+          <div class="opt-impact-header">
+            <span class="opt-impact-icon">&#x1F6E1;</span>
+            <span class="opt-impact-label">Relative Strength</span>
+          </div>
+          <div class="progress-bar opt-impact-bar">
+            <div class="progress-fill" id="opt-cmp-str-bar" style="width:40%; background:var(--success);"></div>
+          </div>
+          <div class="opt-impact-value" id="opt-cmp-str-text">40 / 100</div>
+        </div>
+
+        <div class="card opt-impact-card">
+          <div class="opt-impact-header">
+            <span class="opt-impact-icon">&#x23F1;</span>
+            <span class="opt-impact-label">Relative Print Time</span>
+          </div>
+          <div class="progress-bar opt-impact-bar">
+            <div class="progress-fill" id="opt-cmp-time-bar" style="width:50%; background:var(--warning);"></div>
+          </div>
+          <div class="opt-impact-value" id="opt-cmp-time-text">50 / 100 (moderate)</div>
+        </div>
+
+        <div class="card opt-impact-card">
+          <div class="opt-impact-header">
+            <span class="opt-impact-icon">&#x1F9F5;</span>
+            <span class="opt-impact-label">Filament Usage</span>
+          </div>
+          <div class="progress-bar opt-impact-bar">
+            <div class="progress-fill" id="opt-cmp-fil-bar" style="width:35%; background:var(--accent);"></div>
+          </div>
+          <div class="opt-impact-value" id="opt-cmp-fil-text">35 / 100 (low)</div>
+        </div>
+
+        <div class="card opt-impact-card">
+          <div class="opt-impact-header">
+            <span class="opt-impact-icon">&#x2728;</span>
+            <span class="opt-impact-label">Surface Quality</span>
+          </div>
+          <div class="progress-bar opt-impact-bar">
+            <div class="progress-fill" id="opt-cmp-qual-bar" style="width:65%; background:var(--info);"></div>
+          </div>
+          <div class="opt-impact-value" id="opt-cmp-qual-text">65 / 100 (good)</div>
+        </div>
+
+        <!-- Summary guidance -->
+        <div class="card opt-compare-summary" id="opt-cmp-summary">
+          <div class="card-title mb-sm">Analysis</div>
+          <p class="text-sm" id="opt-cmp-summary-text">Adjust the sliders on the left to see real-time analysis of your settings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Strength ========== -->
+  <div class="tab-panel" id="opt-tab-strength">
+    <p class="text-sm text-muted mb-md">Enter your print settings to estimate relative part strength, weight, and print time. These are heuristic estimates for solid-walled prismatic parts.</p>
+
+    <div class="opt-strength-layout">
+      <!-- Input Form -->
+      <div class="card opt-strength-form">
+        <div class="card-title mb-md">Settings Input</div>
+
+        <div class="form-group">
+          <label class="form-label">Material</label>
+          <select class="form-select" id="opt-str-material">
+            <option value="PLA">PLA</option>
+            <option value="PLA+">PLA+</option>
+            <option value="PETG" selected>PETG</option>
+            <option value="TPU">TPU</option>
+            <option value="ABS">ABS</option>
+            <option value="ASA">ASA</option>
+            <option value="Nylon">Nylon</option>
+            <option value="PC">PC</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Wall Count</label>
+            <input type="number" class="form-input" id="opt-str-walls" min="1" max="10" value="3">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Infill %</label>
+            <input type="number" class="form-input" id="opt-str-infill" min="0" max="100" value="20" step="5">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Infill Pattern</label>
+            <select class="form-select" id="opt-str-pattern">
+              <option value="grid">Grid</option>
+              <option value="gyroid">Gyroid</option>
+              <option value="honeycomb">Honeycomb</option>
+              <option value="cubic">Cubic</option>
+              <option value="triangles">Triangles</option>
+              <option value="lines">Lines</option>
+              <option value="concentric">Concentric</option>
+              <option value="lightning">Lightning</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Layer Height (mm)</label>
+            <select class="form-select" id="opt-str-layer">
+              <option value="0.08">0.08 (Ultra Fine)</option>
+              <option value="0.12">0.12 (Fine)</option>
+              <option value="0.16">0.16 (Medium-Fine)</option>
+              <option value="0.20" selected>0.20 (Standard)</option>
+              <option value="0.24">0.24 (Draft)</option>
+              <option value="0.28">0.28 (Fast Draft)</option>
+              <option value="0.32">0.32 (Speed)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Top/Bottom Layers</label>
+            <input type="number" class="form-input" id="opt-str-shells" min="1" max="20" value="4">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Speed (mm/s)</label>
+            <input type="number" class="form-input" id="opt-str-speed" min="20" max="500" value="150" step="10">
+          </div>
+        </div>
+
+        <button class="btn btn-primary mt-sm" id="opt-str-calculate" style="width:100%;">Calculate Strength Score</button>
+      </div>
+
+      <!-- Results -->
+      <div class="opt-strength-results">
+        <!-- Strength Score -->
+        <div class="card opt-str-result-card">
+          <div class="card-title mb-md">Relative Strength Score</div>
+          <div class="opt-str-meter-container">
+            <div class="opt-str-meter">
+              <div class="opt-str-meter-fill" id="opt-str-score-fill"></div>
+            </div>
+            <div class="opt-str-score-label" id="opt-str-score-text">--</div>
+          </div>
+          <div class="opt-str-rating-label" id="opt-str-rating">Enter settings and click Calculate</div>
+        </div>
+
+        <!-- Estimates Row -->
+        <div class="grid-3">
+          <div class="card" style="text-align:center;">
+            <div class="stat-label">Weight Factor</div>
+            <div class="stat-value" id="opt-str-weight">--</div>
+            <div class="text-sm text-muted" id="opt-str-weight-note">vs baseline</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat-label">Time Factor</div>
+            <div class="stat-value" id="opt-str-time">--</div>
+            <div class="text-sm text-muted" id="opt-str-time-note">vs baseline</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat-label">Layer Adhesion</div>
+            <div class="stat-value" id="opt-str-adhesion">--</div>
+            <div class="text-sm text-muted" id="opt-str-adhesion-note">inter-layer</div>
+          </div>
+        </div>
+
+        <!-- Guidance -->
+        <div class="card" id="opt-str-guidance">
+          <div class="card-title mb-sm">Recommendations</div>
+          <div id="opt-str-guidance-text" class="text-sm text-muted">
+            Adjust the parameters and calculate to see specific recommendations for improving part strength.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Infill Guide ========== -->
+  <div class="tab-panel" id="opt-tab-infill">
+    <p class="text-sm text-muted mb-md">Visual reference for common infill patterns. Strength ratings are relative to the same infill percentage.</p>
+    <div class="grid-2" id="opt-infill-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ========== TAB: Troubleshooter ========== -->
+  <div class="tab-panel" id="opt-tab-troubleshoot">
+    <div class="card mb-md">
+      <div class="card-title mb-sm">Print Problem Diagnostic</div>
+      <p class="text-sm text-muted mb-md">Select the issue you are experiencing for step-by-step diagnostic and fixes.</p>
+
+      <div class="form-group">
+        <label class="form-label">My print has...</label>
+        <select class="form-select" id="opt-ts-issue">
+          <option value="">-- Select an issue --</option>
+          <option value="stringing">Stringing / Oozing</option>
+          <option value="layer_shift">Layer Shifts</option>
+          <option value="warping">Warping / Lifting</option>
+          <option value="elephants_foot">Elephant's Foot</option>
+          <option value="under_extrusion">Under-Extrusion</option>
+          <option value="over_extrusion">Over-Extrusion</option>
+          <option value="poor_bridging">Poor Bridging</option>
+          <option value="layer_separation">Layer Separation / Delamination</option>
+          <option value="zits_blobs">Zits / Blobs on Surface</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Diagnostic output -->
+    <div id="opt-ts-output" style="display:none;">
+      <div class="card mb-md">
+        <div class="flex items-center gap-sm mb-sm">
+          <span class="opt-ts-issue-icon" id="opt-ts-icon"></span>
+          <div class="card-title" id="opt-ts-title"></div>
+        </div>
+        <p class="text-sm text-muted mb-md" id="opt-ts-description"></p>
+
+        <div class="opt-ts-section">
+          <h4 class="opt-ts-section-title">Common Causes</h4>
+          <ul class="opt-ts-list" id="opt-ts-causes"></ul>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div id="opt-ts-steps-container"></div>
+
+      <!-- Quick Settings -->
+      <div class="card" id="opt-ts-settings-card" style="display:none;">
+        <div class="card-title mb-sm">Suggested Slicer Settings</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Recommended Value</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="opt-ts-settings-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="opt-ts-empty">
+      <div class="empty-state">
+        <div class="empty-state-icon">&#x1F50D;</div>
+        <div class="empty-state-title">Select an issue above</div>
+        <div class="empty-state-text">Choose the problem you are experiencing and get step-by-step troubleshooting guidance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: Create/Edit Profile ========== -->
+  <div class="modal-overlay" id="opt-profile-modal">
+    <div class="modal" style="max-width:680px;">
+      <div class="modal-header">
+        <div class="modal-title" id="opt-modal-title">New Print Profile</div>
+        <button class="modal-close" id="opt-modal-close-x">&times;</button>
+      </div>
+
+      <form id="opt-profile-form" autocomplete="off">
+        <input type="hidden" id="opt-form-id">
+
+        <!-- Name + Printer -->
+        <div class="form-row">
+          <div class="form-group" style="flex:2;">
+            <label class="form-label">Profile Name *</label>
+            <input type="text" class="form-input" id="opt-form-name" required placeholder="e.g. Strong Functional PETG">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Printer</label>
+            <select class="form-select" id="opt-form-printer">
+              <option value="both">Both Printers</option>
+              <option value="bambu_a1">Bambu Lab A1</option>
+              <option value="kobra_s1">Kobra S1</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Material + Use Case -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Material *</label>
+            <select class="form-select" id="opt-form-material" required>
+              <option value="">Select...</option>
+              <option value="PLA">PLA</option>
+              <option value="PLA+">PLA+</option>
+              <option value="PETG">PETG</option>
+              <option value="TPU">TPU</option>
+              <option value="ABS">ABS</option>
+              <option value="ASA">ASA</option>
+              <option value="Nylon">Nylon</option>
+              <option value="PC">PC</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Use Case</label>
+            <select class="form-select" id="opt-form-usecase">
+              <option value="structural">Structural / Functional</option>
+              <option value="fast">Fast Draft</option>
+              <option value="display">Display / Decorative</option>
+              <option value="flexible">Flexible Part</option>
+              <option value="mechanical">Mechanical / Moving Parts</option>
+              <option value="outdoor">Outdoor / UV Resistant</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Layer Height + Infill -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Layer Height (mm)</label>
+            <input type="number" class="form-input" id="opt-form-layerheight" min="0.04" max="0.6" step="0.02" value="0.20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Infill %</label>
+            <input type="number" class="form-input" id="opt-form-infill" min="0" max="100" step="5" value="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Infill Pattern</label>
+            <select class="form-select" id="opt-form-pattern">
+              <option value="grid">Grid</option>
+              <option value="gyroid">Gyroid</option>
+              <option value="honeycomb">Honeycomb</option>
+              <option value="cubic">Cubic</option>
+              <option value="triangles">Triangles</option>
+              <option value="lines">Lines</option>
+              <option value="concentric">Concentric</option>
+              <option value="lightning">Lightning</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Walls + Top/Bottom -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Wall Count</label>
+            <input type="number" class="form-input" id="opt-form-walls" min="1" max="10" step="1" value="3">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Top Layers</label>
+            <input type="number" class="form-input" id="opt-form-top" min="1" max="20" step="1" value="4">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bottom Layers</label>
+            <input type="number" class="form-input" id="opt-form-bottom" min="1" max="20" step="1" value="4">
+          </div>
+        </div>
+
+        <!-- Speed + Temps -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Speed (mm/s)</label>
+            <input type="number" class="form-input" id="opt-form-speed" min="10" max="600" step="10" value="150">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nozzle Temp (&deg;C)</label>
+            <input type="number" class="form-input" id="opt-form-nozzletemp" min="170" max="300" step="5" value="210">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bed Temp (&deg;C)</label>
+            <input type="number" class="form-input" id="opt-form-bedtemp" min="0" max="120" step="5" value="60">
+          </div>
+        </div>
+
+        <!-- Notes + Tags -->
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" id="opt-form-notes" rows="2" placeholder="Any notes about this profile..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags (comma separated)</label>
+          <input type="text" class="form-input" id="opt-form-tags" placeholder="e.g. strong, outdoor, tested">
+        </div>
+      </form>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="opt-modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="opt-modal-delete" style="display:none;">Delete</button>
+        <button class="btn btn-primary" id="opt-modal-save">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+</div>

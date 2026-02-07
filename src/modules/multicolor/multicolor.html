@@ -1,0 +1,513 @@
+<!-- Multi-Color Print Planner Module -->
+<div id="multicolor-module">
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Multi-Color Print Planner</h2>
+      <p class="text-sm text-muted">Plan color assignments, estimate purge waste, and optimize multi-color prints across all AMS/Ace units</p>
+    </div>
+    <div class="flex items-center gap-sm">
+      <button class="btn btn-secondary btn-sm" id="mc-btn-refresh">Reload Inventory</button>
+      <button class="btn btn-primary" id="mc-btn-new-plan">+ New Plan</button>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="mc-tab-bar">
+    <button class="tab-btn active" data-tab="mc-tab-palette">Color Palette</button>
+    <button class="tab-btn" data-tab="mc-tab-purge">Purge Estimator</button>
+    <button class="tab-btn" data-tab="mc-tab-slots">Slot Planner</button>
+    <button class="tab-btn" data-tab="mc-tab-cost">Cost Calculator</button>
+  </div>
+
+  <!-- ========== TAB: Color Palette ========== -->
+  <div class="tab-panel active" id="mc-tab-palette">
+
+    <!-- Add Needed Color -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Needed Colors for Print</div>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-clear-colors">Clear All</button>
+      </div>
+      <p class="text-sm text-muted mb-md">Add the colors your model requires. The planner will find the best matches from your loaded filament inventory.</p>
+      <div class="mc-color-add-row">
+        <div class="form-group" style="flex:0 0 auto; margin-bottom:0;">
+          <label class="form-label">Color</label>
+          <input type="color" class="mc-color-picker" id="mc-pick-color" value="#e74c6f">
+        </div>
+        <div class="form-group" style="flex:1; margin-bottom:0;">
+          <label class="form-label">Color Name</label>
+          <input type="text" class="form-input" id="mc-pick-name" placeholder="e.g. Crimson Red">
+        </div>
+        <div class="form-group" style="flex:0 0 100px; margin-bottom:0;">
+          <label class="form-label">Usage (g)</label>
+          <input type="number" class="form-input" id="mc-pick-grams" placeholder="25" min="0" step="0.1" value="25">
+        </div>
+        <div class="form-group" style="flex:0 0 auto; margin-bottom:0; align-self:flex-end;">
+          <button class="btn btn-primary" id="mc-btn-add-color">+ Add</button>
+        </div>
+      </div>
+
+      <!-- Needed colors display -->
+      <div class="mc-needed-colors" id="mc-needed-colors">
+        <div class="empty-state" id="mc-needed-empty" style="padding:24px;">
+          <div class="empty-state-icon" style="font-size:32px;">&#x1F3A8;</div>
+          <div class="empty-state-title" style="font-size:14px;">No colors added yet</div>
+          <div class="empty-state-text">Add the colors your multi-color print requires above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Currently Loaded Filaments -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Loaded Filament Inventory</div>
+        <span class="tag" id="mc-loaded-count">0 loaded</span>
+      </div>
+      <p class="text-sm text-muted mb-md">Filaments currently loaded across all AMS/Ace units. Only loaded filaments are considered for color matching.</p>
+      <div class="grid-2" id="mc-loaded-filaments">
+        <!-- Rendered by JS: one panel per printer -->
+      </div>
+      <div class="empty-state hidden" id="mc-loaded-empty" style="padding:24px;">
+        <div class="empty-state-icon" style="font-size:32px;">&#x1F9F5;</div>
+        <div class="empty-state-title" style="font-size:14px;">No filaments loaded</div>
+        <div class="empty-state-text">Load filaments into AMS/Ace slots via the Filament Manager to enable color matching.</div>
+      </div>
+    </div>
+
+    <!-- Color Matching Results -->
+    <div class="card" id="mc-matching-card" style="display:none;">
+      <div class="card-header">
+        <div class="card-title">Color Match Results</div>
+        <div class="flex items-center gap-sm">
+          <span class="tag" id="mc-match-score-tag">--</span>
+          <button class="btn btn-sm btn-primary" id="mc-btn-apply-matches">Apply to Slot Planner</button>
+        </div>
+      </div>
+      <div id="mc-match-results">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Printer Comparison -->
+      <div class="mc-printer-comparison mt-md" id="mc-printer-comparison">
+        <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Printer Comparison</div>
+        <div class="grid-2" id="mc-printer-compare-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Substitution Suggestions -->
+      <div class="mc-substitutions mt-md" id="mc-substitutions" style="display:none;">
+        <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Substitution Suggestions</div>
+        <div id="mc-substitution-list">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB: Purge Estimator ========== -->
+  <div class="tab-panel" id="mc-tab-purge">
+
+    <!-- Purge Parameters -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Purge Parameters</div>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-purge-reset">Reset Defaults</button>
+      </div>
+      <p class="text-sm text-muted mb-md">Configure purge estimation based on your print's color change profile. Values can vary by slicer and printer firmware.</p>
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label">Colors in Print</label>
+          <input type="number" class="form-input" id="mc-purge-colors" min="2" max="12" step="1" value="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color Changes per Layer</label>
+          <input type="number" class="form-input" id="mc-purge-changes" min="1" max="20" step="1" value="3">
+          <span class="text-sm text-muted">Avg swaps each layer</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Layers</label>
+          <input type="number" class="form-input" id="mc-purge-layers" min="1" max="5000" step="1" value="200">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label">Purge Volume per Swap (mm&sup3;)</label>
+          <input type="number" class="form-input" id="mc-purge-volume" min="10" max="1000" step="5" value="180">
+          <span class="text-sm text-muted">Typical: 120-300 mm&sup3;</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Filament Density (g/cm&sup3;)</label>
+          <input type="number" class="form-input" id="mc-purge-density" min="0.5" max="2.0" step="0.01" value="1.24">
+          <span class="text-sm text-muted">PLA: 1.24, PETG: 1.27, ABS: 1.04</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Filament Cost ($/kg)</label>
+          <input type="number" class="form-input" id="mc-purge-cost" min="0" max="200" step="0.5" value="20">
+        </div>
+      </div>
+
+      <!-- Advanced settings -->
+      <div class="form-section-toggle" id="mc-purge-adv-toggle">
+        <span class="toggle-arrow" id="mc-purge-adv-arrow">&#x25B6;</span>
+        Advanced Settings
+      </div>
+      <div class="form-section-collapsible" id="mc-purge-adv-section" style="display:none;">
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Light-to-Dark Reduction (%)</label>
+            <input type="number" class="form-input" id="mc-purge-ltd-reduction" min="0" max="80" step="5" value="30">
+            <span class="text-sm text-muted">Less purge when going light to dark</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dark-to-Light Increase (%)</label>
+            <input type="number" class="form-input" id="mc-purge-dtl-increase" min="0" max="100" step="5" value="20">
+            <span class="text-sm text-muted">Extra purge when going dark to light</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Purge Tower Infill (%)</label>
+            <input type="number" class="form-input" id="mc-purge-tower-infill" min="10" max="100" step="5" value="100">
+            <span class="text-sm text-muted">Some slicers use sparse towers</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" id="mc-btn-calc-purge">Calculate Purge Waste</button>
+      </div>
+    </div>
+
+    <!-- Purge Results -->
+    <div class="card" id="mc-purge-results-card" style="display:none;">
+      <div class="card-header">
+        <div class="card-title">Purge Waste Estimation</div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="grid-4 mb-md" id="mc-purge-summary">
+        <div class="mc-purge-stat-card">
+          <div class="stat-label">Total Color Swaps</div>
+          <div class="stat-value" id="mc-purge-total-swaps">0</div>
+        </div>
+        <div class="mc-purge-stat-card">
+          <div class="stat-label">Purge Waste</div>
+          <div class="stat-value" id="mc-purge-total-waste">0g</div>
+        </div>
+        <div class="mc-purge-stat-card">
+          <div class="stat-label">Waste Cost</div>
+          <div class="stat-value" id="mc-purge-waste-cost">$0</div>
+        </div>
+        <div class="mc-purge-stat-card">
+          <div class="stat-label">Waste / Model Ratio</div>
+          <div class="stat-value" id="mc-purge-ratio">--</div>
+        </div>
+      </div>
+
+      <!-- Printer comparison -->
+      <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Printer Purge Comparison</div>
+      <div class="grid-2 mb-md">
+        <div class="mc-printer-purge-card" id="mc-purge-bambu">
+          <div class="mc-printer-purge-header">
+            <span class="mc-printer-purge-name">Bambu Lab A1 Combo</span>
+            <span class="tag">AMS Lite &middot; 4 slots</span>
+          </div>
+          <div class="mc-printer-purge-body">
+            <div class="mc-purge-detail-row">
+              <span>Purge Method</span>
+              <span class="mc-purge-detail-val" id="mc-purge-bambu-method">Purge tower</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Waste Estimate</span>
+              <span class="mc-purge-detail-val" id="mc-purge-bambu-waste">--</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Print Time Impact</span>
+              <span class="mc-purge-detail-val" id="mc-purge-bambu-time">--</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Purge Tower Footprint</span>
+              <span class="mc-purge-detail-val" id="mc-purge-bambu-footprint">--</span>
+            </div>
+          </div>
+        </div>
+        <div class="mc-printer-purge-card" id="mc-purge-kobra">
+          <div class="mc-printer-purge-header">
+            <span class="mc-printer-purge-name">Anycubic Kobra S1 Combo</span>
+            <span class="tag">Dual Ace Pro &middot; 8 slots</span>
+          </div>
+          <div class="mc-printer-purge-body">
+            <div class="mc-purge-detail-row">
+              <span>Purge Method</span>
+              <span class="mc-purge-detail-val" id="mc-purge-kobra-method">Purge tower</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Waste Estimate</span>
+              <span class="mc-purge-detail-val" id="mc-purge-kobra-waste">--</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Print Time Impact</span>
+              <span class="mc-purge-detail-val" id="mc-purge-kobra-time">--</span>
+            </div>
+            <div class="mc-purge-detail-row">
+              <span>Purge Tower Footprint</span>
+              <span class="mc-purge-detail-val" id="mc-purge-kobra-footprint">--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waste Reduction Tips -->
+      <div class="mc-tips-card">
+        <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Waste Reduction Tips</div>
+        <div id="mc-purge-tips">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB: Slot Planner ========== -->
+  <div class="tab-panel" id="mc-tab-slots">
+
+    <!-- Planner Toolbar -->
+    <div class="flex items-center justify-between mb-md">
+      <div class="flex items-center gap-sm">
+        <select class="form-select" id="mc-slot-plan-select" style="width:220px;">
+          <option value="">-- Current Slot Layout --</option>
+        </select>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-save-plan">Save Plan</button>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-delete-plan">Delete Plan</button>
+      </div>
+      <div class="flex items-center gap-sm">
+        <button class="btn btn-sm btn-secondary" id="mc-btn-auto-assign">Auto-Assign Colors</button>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-clear-plan">Clear Slots</button>
+      </div>
+    </div>
+
+    <!-- Visual Slot Grid -->
+    <div class="mc-slot-planner-grid" id="mc-slot-planner-grid">
+      <!-- Rendered by JS: 3 AMS/Ace unit cards with draggable slots -->
+    </div>
+
+    <!-- Unassigned Colors Pool -->
+    <div class="card mt-md" id="mc-unassigned-card">
+      <div class="card-header">
+        <div class="card-title">Unassigned Colors</div>
+        <span class="text-sm text-muted">Drag colors to slots above, or click a slot to assign</span>
+      </div>
+      <div class="mc-unassigned-pool" id="mc-unassigned-pool">
+        <div class="empty-state" id="mc-unassigned-empty" style="padding:16px;">
+          <div class="empty-state-text">Add colors in the Color Palette tab first, then plan slot assignments here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch Planning -->
+    <div class="card mt-md">
+      <div class="card-header">
+        <div class="card-title">Batch Planning</div>
+        <button class="btn btn-sm btn-primary" id="mc-btn-add-batch">+ Add Model</button>
+      </div>
+      <p class="text-sm text-muted mb-md">Plan slot configurations for multiple models in a print queue. Each model can have different color requirements.</p>
+      <div id="mc-batch-list">
+        <div class="empty-state" id="mc-batch-empty" style="padding:20px;">
+          <div class="empty-state-icon" style="font-size:28px;">&#x1F4E6;</div>
+          <div class="empty-state-title" style="font-size:14px;">No batch models</div>
+          <div class="empty-state-text">Add models to plan multiple color configurations in sequence.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Plan Modal -->
+    <div class="modal-overlay" id="mc-modal-save-plan">
+      <div class="modal" style="max-width:440px;">
+        <div class="modal-header">
+          <div class="modal-title">Save Slot Plan</div>
+          <button class="modal-close" data-close="mc-modal-save-plan">&times;</button>
+        </div>
+        <form id="mc-form-save-plan" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label">Plan Name *</label>
+            <input type="text" class="form-input" id="mc-plan-name" required placeholder="e.g. Dragon Model - 6 Colors">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea class="form-textarea" id="mc-plan-notes" rows="2" placeholder="Optional notes about this configuration..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close="mc-modal-save-plan">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Plan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Batch Model Modal -->
+    <div class="modal-overlay" id="mc-modal-add-batch">
+      <div class="modal" style="max-width:500px;">
+        <div class="modal-header">
+          <div class="modal-title">Add Batch Model</div>
+          <button class="modal-close" data-close="mc-modal-add-batch">&times;</button>
+        </div>
+        <form id="mc-form-add-batch" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label">Model Name *</label>
+            <input type="text" class="form-input" id="mc-batch-model-name" required placeholder="e.g. Benchy - Rainbow">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Printer</label>
+            <select class="form-select" id="mc-batch-printer">
+              <option value="bambu_a1">Bambu Lab A1 Combo</option>
+              <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Number of Colors</label>
+            <input type="number" class="form-input" id="mc-batch-color-count" min="1" max="12" value="4">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Filament (g)</label>
+            <input type="number" class="form-input" id="mc-batch-filament" min="0" step="1" value="50">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close="mc-modal-add-batch">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Model</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Cost Calculator ========== -->
+  <div class="tab-panel" id="mc-tab-cost">
+
+    <!-- Model Parameters -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Print Cost Parameters</div>
+        <button class="btn btn-sm btn-secondary" id="mc-btn-cost-reset">Reset</button>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label">Total Model Filament (g)</label>
+          <input type="number" class="form-input" id="mc-cost-model-grams" min="0" step="1" value="100">
+          <span class="text-sm text-muted">Weight of the actual model</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Colors</label>
+          <input type="number" class="form-input" id="mc-cost-colors" min="1" max="12" step="1" value="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Layers</label>
+          <input type="number" class="form-input" id="mc-cost-layers" min="1" max="5000" step="1" value="200">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label">Avg Color Changes / Layer</label>
+          <input type="number" class="form-input" id="mc-cost-changes" min="1" max="20" step="1" value="3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Purge Volume / Swap (mm&sup3;)</label>
+          <input type="number" class="form-input" id="mc-cost-purge-vol" min="10" max="1000" step="5" value="180">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Electricity Rate ($/kWh)</label>
+          <input type="number" class="form-input" id="mc-cost-elec-rate" min="0" max="1" step="0.01" value="0.12">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label">Print Time (hours)</label>
+          <input type="number" class="form-input" id="mc-cost-time-hrs" min="0" max="200" step="0.5" value="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Printer Power Draw (W)</label>
+          <input type="number" class="form-input" id="mc-cost-wattage" min="0" max="2000" step="10" value="120">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Filament Density (g/cm&sup3;)</label>
+          <input type="number" class="form-input" id="mc-cost-density" min="0.5" max="2.0" step="0.01" value="1.24">
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <button class="btn btn-primary" id="mc-btn-calc-cost">Calculate Total Cost</button>
+      </div>
+    </div>
+
+    <!-- Cost Breakdown -->
+    <div class="card" id="mc-cost-results-card" style="display:none;">
+      <div class="card-header">
+        <div class="card-title">Cost Breakdown</div>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="grid-4 mb-md" id="mc-cost-summary">
+        <div class="mc-cost-stat-card">
+          <div class="stat-label">Model Filament</div>
+          <div class="stat-value" id="mc-cost-filament-total">$0</div>
+        </div>
+        <div class="mc-cost-stat-card">
+          <div class="stat-label">Purge Waste</div>
+          <div class="stat-value" id="mc-cost-purge-total">$0</div>
+        </div>
+        <div class="mc-cost-stat-card">
+          <div class="stat-label">Electricity</div>
+          <div class="stat-value" id="mc-cost-elec-total">$0</div>
+        </div>
+        <div class="mc-cost-stat-card mc-cost-grand-total">
+          <div class="stat-label">Total Cost</div>
+          <div class="stat-value" id="mc-cost-grand-total">$0</div>
+        </div>
+      </div>
+
+      <!-- Detailed filament breakdown -->
+      <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Filament Breakdown by Color</div>
+      <div class="table-container mb-md">
+        <table>
+          <thead>
+            <tr>
+              <th>Color</th>
+              <th>Spool</th>
+              <th>Model Usage (g)</th>
+              <th>Purge Waste (g)</th>
+              <th>Cost/kg</th>
+              <th>Line Cost</th>
+            </tr>
+          </thead>
+          <tbody id="mc-cost-color-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Visual cost breakdown bar -->
+      <div class="card-subtitle mb-sm" style="font-weight:600; color:var(--text-primary);">Cost Distribution</div>
+      <div class="mc-cost-breakdown-visual" id="mc-cost-visual">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Per-unit metrics -->
+      <div class="grid-3 mt-md">
+        <div class="mc-cost-metric">
+          <div class="stat-label">Cost per Gram (Model)</div>
+          <div class="mc-cost-metric-value" id="mc-cost-per-gram">$0.00</div>
+        </div>
+        <div class="mc-cost-metric">
+          <div class="stat-label">Waste Percentage</div>
+          <div class="mc-cost-metric-value" id="mc-cost-waste-pct">0%</div>
+        </div>
+        <div class="mc-cost-metric">
+          <div class="stat-label">Cost if Single Color</div>
+          <div class="mc-cost-metric-value" id="mc-cost-single-color">$0.00</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,345 @@
+<!-- Filament Manager Module -->
+<div id="filament-module">
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Filament Manager</h2>
+      <p class="text-sm text-muted">Manage spools across 3 AMS/Ace units (12 slots)</p>
+    </div>
+    <button class="btn btn-primary" id="fil-btn-add-spool">+ Add Spool</button>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="fil-tab-bar">
+    <button class="tab-btn active" data-tab="fil-tab-slotmap">Slot Map</button>
+    <button class="tab-btn" data-tab="fil-tab-inventory">Inventory</button>
+    <button class="tab-btn" data-tab="fil-tab-costs">Costs</button>
+    <button class="tab-btn" data-tab="fil-tab-materials">Materials</button>
+    <button class="tab-btn" data-tab="fil-tab-wishlist">Wishlist</button>
+  </div>
+
+  <!-- ========== TAB: Slot Map ========== -->
+  <div class="tab-panel active" id="fil-tab-slotmap">
+    <div class="fil-slotmap-grid" id="fil-slotmap-container">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ========== TAB: Inventory ========== -->
+  <div class="tab-panel" id="fil-tab-inventory">
+    <!-- Toolbar -->
+    <div class="flex items-center justify-between mb-md fil-inv-toolbar">
+      <div class="flex items-center gap-sm">
+        <input type="text" class="form-input" id="fil-inv-search" placeholder="Search spools..." style="width:220px;">
+        <select class="form-select" id="fil-inv-filter-status" style="width:140px;">
+          <option value="all">All Status</option>
+          <option value="loaded">Loaded</option>
+          <option value="storage">Storage</option>
+          <option value="empty">Empty</option>
+        </select>
+        <select class="form-select" id="fil-inv-filter-material" style="width:140px;">
+          <option value="all">All Materials</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-sm">
+        <select class="form-select" id="fil-inv-sort" style="width:160px;">
+          <option value="name">Sort: Name</option>
+          <option value="material">Sort: Material</option>
+          <option value="remaining">Sort: Remaining</option>
+          <option value="cost">Sort: Cost</option>
+          <option value="date">Sort: Purchase Date</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Low filament warnings -->
+    <div id="fil-low-warnings" class="mb-md" style="display:none;"></div>
+
+    <!-- Inventory table -->
+    <div class="card">
+      <div class="table-container">
+        <table id="fil-inv-table">
+          <thead>
+            <tr>
+              <th>Color</th>
+              <th>Brand / Name</th>
+              <th>Material</th>
+              <th>Status</th>
+              <th>Remaining</th>
+              <th>Cost/kg</th>
+              <th>Location</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="fil-inv-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+      <div id="fil-inv-empty" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">&#x1F9F5;</div>
+        <div class="empty-state-title">No spools yet</div>
+        <div class="empty-state-text">Add your first filament spool to start tracking your inventory.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Costs ========== -->
+  <div class="tab-panel" id="fil-tab-costs">
+    <!-- Summary cards -->
+    <div class="grid-4 mb-md" id="fil-cost-summary">
+      <div class="card">
+        <div class="stat-label">Total Spent</div>
+        <div class="stat-value" id="fil-cost-total">$0.00</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">Avg Cost / kg</div>
+        <div class="stat-value" id="fil-cost-avg-kg">$0.00</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value" id="fil-cost-month">$0.00</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">This Year</div>
+        <div class="stat-value" id="fil-cost-year">$0.00</div>
+      </div>
+    </div>
+
+    <!-- Cost breakdown table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Cost Breakdown by Spool</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Spool</th>
+              <th>Material</th>
+              <th>Weight</th>
+              <th>Cost / kg</th>
+              <th>Spool Cost</th>
+              <th>Cost / g Used</th>
+              <th>Purchase Date</th>
+            </tr>
+          </thead>
+          <tbody id="fil-cost-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Monthly spending table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Monthly Spending</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Spools Purchased</th>
+              <th>Total Spent</th>
+            </tr>
+          </thead>
+          <tbody id="fil-cost-monthly-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Materials ========== -->
+  <div class="tab-panel" id="fil-tab-materials">
+    <p class="text-sm text-muted mb-md">Reference database for common 3D printing materials. Temperatures and properties from manufacturer recommendations.</p>
+    <div class="fil-materials-grid" id="fil-materials-container">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ========== TAB: Wishlist ========== -->
+  <div class="tab-panel" id="fil-tab-wishlist">
+    <!-- Add form -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Add to Wishlist</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" id="fil-wish-name" placeholder="e.g. Bambu PLA Matte Charcoal">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input type="text" class="form-input" id="fil-wish-price" placeholder="e.g. $24.99">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Link</label>
+          <input type="text" class="form-input" id="fil-wish-link" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <input type="text" class="form-input" id="fil-wish-notes" placeholder="Why you want it...">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" id="fil-wish-add-btn">+ Add to Wishlist</button>
+    </div>
+
+    <!-- Wishlist items -->
+    <div id="fil-wishlist-container">
+      <!-- Rendered by JS -->
+    </div>
+    <div id="fil-wishlist-empty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">&#x1F4DD;</div>
+      <div class="empty-state-title">Wishlist is empty</div>
+      <div class="empty-state-text">Add filaments you want to buy in the future.</div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: Add/Edit Spool ========== -->
+  <div class="modal-overlay" id="fil-spool-modal">
+    <div class="modal" style="max-width:680px;">
+      <div class="modal-header">
+        <div class="modal-title" id="fil-modal-title">Add Filament Spool</div>
+        <button class="modal-close" id="fil-modal-close-x">&times;</button>
+      </div>
+
+      <form id="fil-spool-form" autocomplete="off">
+        <input type="hidden" id="fil-form-id">
+
+        <!-- Row: Brand + Material -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Brand</label>
+            <input type="text" class="form-input" id="fil-form-brand" placeholder="e.g. Bambu Lab" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Material</label>
+            <select class="form-select" id="fil-form-material" required>
+              <option value="">Select material...</option>
+              <option value="PLA">PLA</option>
+              <option value="PLA+">PLA+</option>
+              <option value="PETG">PETG</option>
+              <option value="TPU">TPU</option>
+              <option value="ABS">ABS</option>
+              <option value="ASA">ASA</option>
+              <option value="Nylon">Nylon</option>
+              <option value="PVA">PVA</option>
+              <option value="HIPS">HIPS</option>
+              <option value="PC">PC</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row: Color name + hex picker -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Color Name</label>
+            <input type="text" class="form-input" id="fil-form-color" placeholder="e.g. Jade White">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color (hex)</label>
+            <div class="flex items-center gap-sm">
+              <input type="color" id="fil-form-colorhex" value="#4facfe" style="width:44px; height:36px; border:none; background:none; cursor:pointer;">
+              <span class="color-swatch color-swatch-lg" id="fil-form-swatch" style="background:#4facfe;"></span>
+              <input type="text" class="form-input" id="fil-form-colorhex-text" value="#4facfe" style="width:100px; font-family:var(--font-mono); font-size:12px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Row: Weight total + remaining -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Total Weight (g)</label>
+            <input type="number" class="form-input" id="fil-form-weight-total" placeholder="1000" min="0" step="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Remaining Weight (g)</label>
+            <input type="number" class="form-input" id="fil-form-weight-remaining" placeholder="1000" min="0" step="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cost per kg ($)</label>
+            <input type="number" class="form-input" id="fil-form-cost" placeholder="19.99" min="0" step="0.01">
+          </div>
+        </div>
+
+        <!-- Row: Purchase date + dried date -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Purchase Date</label>
+            <input type="date" class="form-input" id="fil-form-purchase-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Dried Date</label>
+            <input type="date" class="form-input" id="fil-form-dried-date">
+          </div>
+        </div>
+
+        <!-- Row: Location -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Printer</label>
+            <select class="form-select" id="fil-form-printer">
+              <option value="">Not loaded (storage)</option>
+              <option value="bambu_a1">Bambu Lab A1 Combo</option>
+              <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">AMS/Ace Unit</label>
+            <select class="form-select" id="fil-form-unit">
+              <option value="">N/A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Slot</label>
+            <select class="form-select" id="fil-form-slot">
+              <option value="">N/A</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row: Temp range -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nozzle Min (&deg;C)</label>
+            <input type="number" class="form-input" id="fil-form-nozzle-min" placeholder="190" min="0" max="400">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nozzle Max (&deg;C)</label>
+            <input type="number" class="form-input" id="fil-form-nozzle-max" placeholder="230" min="0" max="400">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bed Min (&deg;C)</label>
+            <input type="number" class="form-input" id="fil-form-bed-min" placeholder="55" min="0" max="200">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bed Max (&deg;C)</label>
+            <input type="number" class="form-input" id="fil-form-bed-max" placeholder="65" min="0" max="200">
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" id="fil-form-notes" rows="2" placeholder="Any notes about this spool..."></textarea>
+        </div>
+      </form>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="fil-modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="fil-modal-delete" style="display:none;">Delete</button>
+        <button class="btn btn-primary" id="fil-modal-save">Save Spool</button>
+      </div>
+    </div>
+  </div>
+
+</div>

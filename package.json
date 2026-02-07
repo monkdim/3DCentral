@@ -1,0 +1,58 @@
+{
+  "name": "printhq",
+  "version": "1.0.0",
+  "description": "PrintHQ — Unified 3D Printing Companion App for Bambu Lab A1 & Anycubic Kobra S1",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build:win": "electron-builder --win --x64"
+  },
+  "keywords": [
+    "3d-printing",
+    "electron",
+    "bambu-lab",
+    "anycubic",
+    "gcode"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^40.2.1",
+    "electron-builder": "^26.7.0"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  },
+  "build": {
+    "appId": "com.printhq.app",
+    "productName": "PrintHQ",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "data/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerSidebar": null,
+      "shortcutName": "PrintHQ"
+    }
+  }
+}
