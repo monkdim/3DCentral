@@ -25,18 +25,11 @@ jobs:
 
       - name: Build Windows installer
         run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
           name: PrintHQ-Windows-Installer
-          path: dist/PrintHQ Setup *.exe
-
-      - name: Create Release
-        if: github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.run_number }}
-          name: PrintHQ v1.0.${{ github.run_number }}
-          files: dist/PrintHQ Setup *.exe
-          generate_release_notes: true
+          path: "dist/*.exe"
