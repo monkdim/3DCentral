@@ -35,7 +35,6 @@
       "preload.js",
       "src/**/*",
       "data/**/*",
-      "node_modules/**/*",
       "package.json"
     ],
     "win": {
@@ -51,7 +50,6 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "installerSidebar": null,
       "shortcutName": "PrintHQ"
     }
   }
