@@ -1,0 +1,771 @@
+<!-- Design Workshop Module — Beginner-friendly parametric design, rules, and STL tools -->
+<div id="workshop-module">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Design Workshop</h2>
+      <p class="text-sm text-muted">Learn design rules, generate parametric parts, fix STL files, and find CAD resources</p>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="ws-tab-bar">
+    <button class="tab-btn active" data-tab="ws-tab-partgen">Part Generator</button>
+    <button class="tab-btn" data-tab="ws-tab-rules">Design Rules</button>
+    <button class="tab-btn" data-tab="ws-tab-measure">Measure Helper</button>
+    <button class="tab-btn" data-tab="ws-tab-stlfix">STL Fix</button>
+    <button class="tab-btn" data-tab="ws-tab-cadlinks">CAD Links</button>
+  </div>
+
+  <!-- ========== TAB: Part Generator ========== -->
+  <div class="tab-panel active" id="ws-tab-partgen">
+    <p class="text-sm text-muted mb-md">Choose a parametric template, adjust dimensions, preview the result, and download an STL-ready specification.</p>
+
+    <!-- Template card grid -->
+    <div class="grid-3 mb-md" id="ws-template-grid">
+
+      <div class="card ws-template-card" data-template="box_with_lid">
+        <div class="ws-template-icon">&#x1F4E6;</div>
+        <div class="ws-template-name">Box with Lid</div>
+        <div class="ws-template-desc">Customizable storage box with snap-fit or loose lid. Great first project.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+      <div class="card ws-template-card" data-template="phone_stand">
+        <div class="ws-template-icon">&#x1F4F1;</div>
+        <div class="ws-template-name">Phone Stand</div>
+        <div class="ws-template-desc">Adjustable-angle phone or tablet stand. Measure your device and go.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+      <div class="card ws-template-card" data-template="cable_clip">
+        <div class="ws-template-icon">&#x1F50C;</div>
+        <div class="ws-template-name">Cable Clip</div>
+        <div class="ws-template-desc">Desk or wall mount cable organizer. Pick your cable diameter and mount style.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+      <div class="card ws-template-card" data-template="shelf_bracket">
+        <div class="ws-template-icon">&#x1F4CF;</div>
+        <div class="ws-template-name">Shelf Bracket</div>
+        <div class="ws-template-desc">L-shaped shelf bracket with screw holes. Specify depth and load rating.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+      <div class="card ws-template-card" data-template="drawer_organizer">
+        <div class="ws-template-icon">&#x1F5C4;</div>
+        <div class="ws-template-name">Drawer Organizer</div>
+        <div class="ws-template-desc">Grid-based drawer insert with configurable compartments. Measure your drawer first.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+      <div class="card ws-template-card" data-template="knob_handle">
+        <div class="ws-template-icon">&#x1F4A0;</div>
+        <div class="ws-template-name">Knob / Handle</div>
+        <div class="ws-template-desc">Replacement knob or handle for drawers and cabinets. Match your existing bolt.</div>
+        <button class="btn btn-primary btn-sm ws-template-btn">Customize</button>
+      </div>
+
+    </div>
+
+    <!-- Parameter form + preview area -->
+    <div id="ws-partgen-workspace" class="ws-workspace hidden">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="ws-partgen-title">Part Parameters</div>
+            <div class="card-subtitle" id="ws-partgen-subtitle"></div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="ws-partgen-back">Back to Templates</button>
+        </div>
+
+        <div class="ws-partgen-layout">
+          <!-- Left: parameter form -->
+          <div class="ws-partgen-form" id="ws-partgen-form">
+            <!-- Populated dynamically per template -->
+          </div>
+
+          <!-- Right: visual preview -->
+          <div class="ws-partgen-preview">
+            <div class="ws-preview-container" id="ws-preview-container">
+              <!-- SVG/CSS preview rendered here -->
+              <div class="ws-preview-placeholder">
+                <div class="ws-preview-placeholder-icon">&#x1F441;</div>
+                <div>Adjust parameters to see preview</div>
+              </div>
+            </div>
+            <div class="ws-preview-dimensions" id="ws-preview-dimensions">
+              <!-- Dimension readout -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="ws-partgen-actions mt-md">
+          <button class="btn btn-success" id="ws-btn-download-spec">Download Specification</button>
+          <button class="btn btn-secondary" id="ws-btn-copy-dims">Copy Dimensions</button>
+          <span class="text-sm text-muted" id="ws-partgen-volume"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Design Rules ========== -->
+  <div class="tab-panel" id="ws-tab-rules">
+    <p class="text-sm text-muted mb-md">Essential design-for-printing rules. Internalize these and your prints will succeed far more often.</p>
+
+    <!-- Rule: Minimum Wall Thickness -->
+    <div class="card ws-rule-card" id="ws-rule-walls">
+      <div class="card-header">
+        <div class="card-title">Minimum Wall Thickness</div>
+        <span class="tag tag-warning">Critical</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-visual" id="ws-visual-walls">
+          <!-- CSS art: wall thickness comparison -->
+          <div class="ws-wall-demo">
+            <div class="ws-wall-sample ws-wall-bad" title="0.3mm - Too thin">
+              <div class="ws-wall-bar" style="width:3px;"></div>
+              <span class="ws-wall-label">0.3mm</span>
+              <span class="ws-wall-verdict text-danger">Fails</span>
+            </div>
+            <div class="ws-wall-sample ws-wall-ok" title="0.8mm - Minimum">
+              <div class="ws-wall-bar" style="width:8px;"></div>
+              <span class="ws-wall-label">0.8mm</span>
+              <span class="ws-wall-verdict text-warning">Minimum</span>
+            </div>
+            <div class="ws-wall-sample ws-wall-good" title="1.2mm - Recommended">
+              <div class="ws-wall-bar" style="width:12px;"></div>
+              <span class="ws-wall-label">1.2mm</span>
+              <span class="ws-wall-verdict text-success">Good</span>
+            </div>
+            <div class="ws-wall-sample ws-wall-strong" title="2.0mm - Strong">
+              <div class="ws-wall-bar" style="width:20px;"></div>
+              <span class="ws-wall-label">2.0mm</span>
+              <span class="ws-wall-verdict text-accent">Strong</span>
+            </div>
+          </div>
+        </div>
+        <div class="ws-rule-text">
+          <p><strong>Rule:</strong> Never go below 2x your nozzle diameter for wall thickness. With a 0.4mm nozzle, your absolute minimum is 0.8mm (2 perimeters).</p>
+          <p>For functional parts that bear any load, use at least 1.2mm (3 perimeters). Thin walls lead to under-extrusion, poor layer adhesion, and fragile parts.</p>
+          <div class="ws-rule-table">
+            <table>
+              <thead>
+                <tr><th>Nozzle Size</th><th>Absolute Min</th><th>Recommended</th><th>Structural</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0.2mm</td><td>0.4mm</td><td>0.6mm</td><td>1.0mm</td></tr>
+                <tr><td>0.4mm</td><td>0.8mm</td><td>1.2mm</td><td>2.0mm</td></tr>
+                <tr><td>0.6mm</td><td>1.2mm</td><td>1.8mm</td><td>2.4mm</td></tr>
+                <tr><td>0.8mm</td><td>1.6mm</td><td>2.4mm</td><td>3.2mm</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-muted mt-sm"><strong>Tip:</strong> Set your wall thickness as an exact multiple of your line width (usually nozzle diameter). E.g. for a 0.4mm nozzle: 0.8, 1.2, 1.6, 2.0mm. This avoids thin gap-fill lines that weaken the part.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Overhang Angles -->
+    <div class="card ws-rule-card" id="ws-rule-overhangs">
+      <div class="card-header">
+        <div class="card-title">Overhang Angles (The 45-Degree Rule)</div>
+        <span class="tag tag-warning">Critical</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-visual">
+          <div class="ws-overhang-demo">
+            <div class="ws-overhang-sample">
+              <svg viewBox="0 0 120 100" class="ws-overhang-svg">
+                <rect x="10" y="20" width="20" height="80" fill="var(--accent)" rx="2"/>
+                <polygon points="30,20 30,60 70,60" fill="var(--success)" opacity="0.8"/>
+                <text x="42" y="52" fill="var(--text-primary)" font-size="10" font-weight="600">45&deg;</text>
+              </svg>
+              <span class="ws-overhang-label text-success">Safe (45&deg;)</span>
+            </div>
+            <div class="ws-overhang-sample">
+              <svg viewBox="0 0 120 100" class="ws-overhang-svg">
+                <rect x="10" y="20" width="20" height="80" fill="var(--accent)" rx="2"/>
+                <polygon points="30,20 30,50 80,50" fill="var(--warning)" opacity="0.8"/>
+                <text x="48" y="44" fill="var(--text-primary)" font-size="10" font-weight="600">60&deg;</text>
+              </svg>
+              <span class="ws-overhang-label text-warning">Risky (60&deg;)</span>
+            </div>
+            <div class="ws-overhang-sample">
+              <svg viewBox="0 0 120 100" class="ws-overhang-svg">
+                <rect x="10" y="20" width="20" height="80" fill="var(--accent)" rx="2"/>
+                <polygon points="30,20 30,35 100,35" fill="var(--danger)" opacity="0.8"/>
+                <text x="55" y="30" fill="var(--text-primary)" font-size="10" font-weight="600">80&deg;</text>
+              </svg>
+              <span class="ws-overhang-label text-danger">Needs Support (80&deg;)</span>
+            </div>
+          </div>
+        </div>
+        <div class="ws-rule-text">
+          <p><strong>Rule:</strong> FDM printers can print overhangs up to about 45 degrees from vertical without support material. Beyond that, you risk drooping, curling, and poor surface finish.</p>
+          <p>Modern slicers and printers with good cooling can sometimes push to 55-60 degrees, but 45 degrees is the safe universal limit. Design chamfers and fillets at 45 degrees to avoid supports entirely.</p>
+          <p><strong>Strategies to avoid supports:</strong></p>
+          <ul class="ws-rule-list">
+            <li>Add 45-degree chamfers to overhanging edges</li>
+            <li>Split the model and print flat, then glue</li>
+            <li>Rotate the model for a more favorable orientation</li>
+            <li>Use teardrop-shaped holes instead of circular ones on vertical faces</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Bridging -->
+    <div class="card ws-rule-card" id="ws-rule-bridging">
+      <div class="card-header">
+        <div class="card-title">Bridging Distances</div>
+        <span class="tag">Intermediate</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-visual">
+          <div class="ws-bridge-demo">
+            <div class="ws-bridge-sample">
+              <div class="ws-bridge-pillar"></div>
+              <div class="ws-bridge-span ws-bridge-short"></div>
+              <div class="ws-bridge-pillar"></div>
+              <span class="ws-bridge-label text-success">&lt; 20mm OK</span>
+            </div>
+            <div class="ws-bridge-sample">
+              <div class="ws-bridge-pillar"></div>
+              <div class="ws-bridge-span ws-bridge-medium"></div>
+              <div class="ws-bridge-pillar"></div>
+              <span class="ws-bridge-label text-warning">20-50mm Sag</span>
+            </div>
+            <div class="ws-bridge-sample">
+              <div class="ws-bridge-pillar"></div>
+              <div class="ws-bridge-span ws-bridge-long"></div>
+              <div class="ws-bridge-pillar"></div>
+              <span class="ws-bridge-label text-danger">&gt; 50mm Fail</span>
+            </div>
+          </div>
+        </div>
+        <div class="ws-rule-text">
+          <p><strong>Rule:</strong> Bridging is printing a horizontal span between two supports. Most printers handle up to ~20mm cleanly. Beyond that, expect sag.</p>
+          <p>Bridge quality depends on cooling, speed, and material. PLA bridges best (stiff when cool). PETG and TPU sag more. For best bridging, use maximum fan speed and reduced print speed (20-30mm/s).</p>
+          <p><strong>Design tips:</strong> If you need a flat ceiling over a large span, add internal support ribs every 15-20mm or split the geometry so bridging segments are shorter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Hole Compensation -->
+    <div class="card ws-rule-card" id="ws-rule-holes">
+      <div class="card-header">
+        <div class="card-title">Hole Compensation</div>
+        <span class="tag tag-warning">Critical</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-text">
+          <p><strong>Rule:</strong> Printed holes are always smaller than designed. The filament bulges inward on curves, shrinkage happens during cooling, and the first layer squish reduces diameter further.</p>
+          <p>For vertical holes (printed as circles), add 0.2-0.5mm to the designed diameter. For horizontal holes (printed as overhangs), use teardrop shapes to avoid the top sag.</p>
+          <div class="ws-rule-table">
+            <table>
+              <thead>
+                <tr><th>Designed Hole</th><th>Add for Press Fit</th><th>Add for Sliding Fit</th><th>Add for Clearance</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>M2 (2.0mm)</td><td>+0.0mm (2.0)</td><td>+0.2mm (2.2)</td><td>+0.4mm (2.4)</td></tr>
+                <tr><td>M3 (3.0mm)</td><td>+0.0mm (3.0)</td><td>+0.2mm (3.2)</td><td>+0.5mm (3.5)</td></tr>
+                <tr><td>M4 (4.0mm)</td><td>+0.1mm (4.1)</td><td>+0.3mm (4.3)</td><td>+0.5mm (4.5)</td></tr>
+                <tr><td>M5 (5.0mm)</td><td>+0.1mm (5.1)</td><td>+0.3mm (5.3)</td><td>+0.5mm (5.5)</td></tr>
+                <tr><td>M6 (6.0mm)</td><td>+0.1mm (6.1)</td><td>+0.3mm (6.3)</td><td>+0.6mm (6.6)</td></tr>
+                <tr><td>M8 (8.0mm)</td><td>+0.2mm (8.2)</td><td>+0.4mm (8.4)</td><td>+0.6mm (8.6)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-muted mt-sm"><strong>Tip:</strong> Always print a test hole array before committing to a large print. Printers vary, and your specific machine + material combo may need different offsets. Print holes at 0.1mm increments and test with your bolt or rod.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Tolerance Guide -->
+    <div class="card ws-rule-card" id="ws-rule-tolerance">
+      <div class="card-header">
+        <div class="card-title">Tolerance Guide: Press-Fit, Sliding, and Loose</div>
+        <span class="tag tag-warning">Critical</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-visual">
+          <div class="ws-tolerance-demo">
+            <div class="ws-tolerance-sample">
+              <div class="ws-tol-outer">
+                <div class="ws-tol-inner ws-tol-press"></div>
+              </div>
+              <span class="ws-tol-label">Press Fit</span>
+              <span class="text-sm text-muted">0.0 - 0.1mm gap</span>
+            </div>
+            <div class="ws-tolerance-sample">
+              <div class="ws-tol-outer">
+                <div class="ws-tol-inner ws-tol-slide"></div>
+              </div>
+              <span class="ws-tol-label">Sliding Fit</span>
+              <span class="text-sm text-muted">0.1 - 0.25mm gap</span>
+            </div>
+            <div class="ws-tolerance-sample">
+              <div class="ws-tol-outer">
+                <div class="ws-tol-inner ws-tol-loose"></div>
+              </div>
+              <span class="ws-tol-label">Loose / Clearance</span>
+              <span class="text-sm text-muted">0.3 - 0.5mm gap</span>
+            </div>
+          </div>
+        </div>
+        <div class="ws-rule-text">
+          <p><strong>Press fit (interference):</strong> The parts are designed to be tight. Used for bearing seats, snap-fit lids, and dowel pins. Design the hole 0.0-0.1mm larger than the shaft. The part may require force to assemble and friction holds it in place.</p>
+          <p><strong>Sliding fit:</strong> Parts move freely but without slop. Used for drawer slides, telescoping tubes, and hinges. Add 0.1-0.25mm per side (0.2-0.5mm total gap).</p>
+          <p><strong>Loose / clearance fit:</strong> Parts move freely with visible gap. Used for bolt pass-through holes and loosely coupled assemblies. Add 0.3-0.5mm per side (0.6-1.0mm total gap).</p>
+          <p class="text-sm text-muted mt-sm"><strong>Key factor:</strong> These values assume PLA at 0.2mm layer height with a well-calibrated printer. PETG shrinks less but is stickier, so increase tolerances by ~0.05mm. ABS shrinks more, so plan for 0.4-0.7% overall shrinkage.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Print Orientation -->
+    <div class="card ws-rule-card" id="ws-rule-orientation">
+      <div class="card-header">
+        <div class="card-title">Print Orientation Effects</div>
+        <span class="tag">Intermediate</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-visual">
+          <div class="ws-orientation-demo">
+            <div class="ws-orient-sample">
+              <svg viewBox="0 0 80 80" class="ws-orient-svg">
+                <rect x="15" y="10" width="50" height="60" fill="var(--accent)" opacity="0.3" rx="3"/>
+                <line x1="15" y1="22" x2="65" y2="22" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="15" y1="34" x2="65" y2="34" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="15" y1="46" x2="65" y2="46" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="15" y1="58" x2="65" y2="58" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <text x="40" y="78" text-anchor="middle" fill="var(--text-secondary)" font-size="8">Flat: Strong XY</text>
+              </svg>
+            </div>
+            <div class="ws-orient-sample">
+              <svg viewBox="0 0 80 80" class="ws-orient-svg">
+                <rect x="25" y="10" width="30" height="60" fill="var(--accent)" opacity="0.3" rx="3"/>
+                <line x1="25" y1="18" x2="55" y2="18" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="26" x2="55" y2="26" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="34" x2="55" y2="34" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="42" x2="55" y2="42" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="50" x2="55" y2="50" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="58" x2="55" y2="58" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <line x1="25" y1="66" x2="55" y2="66" stroke="var(--text-muted)" stroke-width="0.5"/>
+                <text x="40" y="78" text-anchor="middle" fill="var(--text-secondary)" font-size="8">Upright: Weak Z</text>
+              </svg>
+            </div>
+            <div class="ws-orient-sample">
+              <svg viewBox="0 0 80 80" class="ws-orient-svg">
+                <rect x="10" y="25" width="60" height="30" fill="var(--accent)" opacity="0.3" rx="3" transform="rotate(-30 40 40)"/>
+                <text x="40" y="78" text-anchor="middle" fill="var(--text-secondary)" font-size="8">Angled: Balanced</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="ws-rule-text">
+          <p><strong>Rule:</strong> FDM prints are weakest between layers (Z direction). A part printed flat has maximum strength across its face, but breaks easily if pulled apart in Z. Orientation determines strength, surface quality, and support needs.</p>
+          <ul class="ws-rule-list">
+            <li><strong>Flat:</strong> Maximum bed adhesion, best top/bottom surfaces, strongest in XY. Best for flat functional parts like brackets.</li>
+            <li><strong>Upright:</strong> Minimum bed contact, weakest orientation overall (layers delaminate under tension). Use when you need dimensional accuracy on the vertical faces.</li>
+            <li><strong>Angled (45 degrees):</strong> Compromise between strength and surface finish. Useful for parts with overhangs on all sides.</li>
+          </ul>
+          <p class="text-sm text-muted mt-sm"><strong>Golden rule:</strong> Orient the part so the primary stress direction is along the layer lines (XY plane), not across them (Z).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule: Screw Holes & Heat-Set Inserts -->
+    <div class="card ws-rule-card" id="ws-rule-screws">
+      <div class="card-header">
+        <div class="card-title">Screw Holes &amp; Heat-Set Inserts</div>
+        <span class="tag">Advanced</span>
+      </div>
+      <div class="ws-rule-content">
+        <div class="ws-rule-text">
+          <p><strong>Self-tapping screws:</strong> For quick assembly, design undersized pilot holes and drive sheet-metal screws directly into the plastic. The screw cuts its own threads. This works best in PLA and PETG with moderate torque.</p>
+          <div class="ws-rule-table">
+            <table>
+              <thead>
+                <tr><th>Screw Size</th><th>Pilot Hole Dia</th><th>Boss Outer Dia</th><th>Min Depth</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>M2</td><td>1.6mm</td><td>4.0mm</td><td>4mm</td></tr>
+                <tr><td>M2.5</td><td>2.0mm</td><td>5.0mm</td><td>5mm</td></tr>
+                <tr><td>M3</td><td>2.5mm</td><td>6.0mm</td><td>6mm</td></tr>
+                <tr><td>M4</td><td>3.3mm</td><td>8.0mm</td><td>8mm</td></tr>
+                <tr><td>M5</td><td>4.2mm</td><td>10.0mm</td><td>10mm</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-sm"><strong>Heat-set inserts (recommended):</strong> Brass threaded inserts installed with a soldering iron. Far stronger and more repeatable than self-tapping screws. They melt into the plastic and provide metal-to-metal thread engagement.</p>
+          <div class="ws-rule-table">
+            <table>
+              <thead>
+                <tr><th>Insert Size</th><th>Hole Diameter</th><th>Hole Depth</th><th>Boss Outer Dia</th><th>Pull-Out Strength</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>M2 x 3.2mm</td><td>3.0mm</td><td>3.5mm</td><td>6.0mm</td><td>~25 N</td></tr>
+                <tr><td>M3 x 4.6mm</td><td>4.2mm</td><td>5.0mm</td><td>8.0mm</td><td>~80 N</td></tr>
+                <tr><td>M4 x 5.6mm</td><td>5.2mm</td><td>6.0mm</td><td>10.0mm</td><td>~120 N</td></tr>
+                <tr><td>M5 x 7.1mm</td><td>6.6mm</td><td>7.5mm</td><td>12.0mm</td><td>~180 N</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-muted mt-sm"><strong>Tip:</strong> Install heat-set inserts from the side that faces away from load. Set your soldering iron to 200-220&deg;C for PLA, 240-260&deg;C for PETG/ABS. Push in slowly and straight. The insert should sit flush or 0.2mm below the surface.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Measure Helper ========== -->
+  <div class="tab-panel" id="ws-tab-measure">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Measurement Wizard</div>
+        <div class="card-subtitle">Step-by-step guide to measuring real-world objects for 3D printing</div>
+      </div>
+
+      <!-- Progress indicator -->
+      <div class="ws-wizard-progress" id="ws-wizard-progress">
+        <div class="ws-wizard-step active" data-step="0">
+          <div class="ws-wizard-step-num">1</div>
+          <div class="ws-wizard-step-label">Project Type</div>
+        </div>
+        <div class="ws-wizard-step-line"></div>
+        <div class="ws-wizard-step" data-step="1">
+          <div class="ws-wizard-step-num">2</div>
+          <div class="ws-wizard-step-label">Measurements</div>
+        </div>
+        <div class="ws-wizard-step-line"></div>
+        <div class="ws-wizard-step" data-step="2">
+          <div class="ws-wizard-step-num">3</div>
+          <div class="ws-wizard-step-label">Tolerances</div>
+        </div>
+        <div class="ws-wizard-step-line"></div>
+        <div class="ws-wizard-step" data-step="3">
+          <div class="ws-wizard-step-num">4</div>
+          <div class="ws-wizard-step-label">Spec Sheet</div>
+        </div>
+      </div>
+
+      <!-- Step 0: What are you making? -->
+      <div class="ws-wizard-panel active" id="ws-wizard-step-0">
+        <h3 class="ws-wizard-panel-title">What are you designing?</h3>
+        <div class="form-group">
+          <label class="form-label">Project Type</label>
+          <select class="form-select" id="ws-measure-type">
+            <option value="">Select a project type...</option>
+            <option value="enclosure">Enclosure / Box for an existing object</option>
+            <option value="replacement">Replacement part (copying an existing piece)</option>
+            <option value="adapter">Adapter or connector between two things</option>
+            <option value="mount">Mount or bracket for something</option>
+            <option value="cover">Cover, cap, or lid for something</option>
+            <option value="organizer">Organizer or holder</option>
+            <option value="custom">Custom / freeform design</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brief description</label>
+          <input type="text" class="form-input" id="ws-measure-desc" placeholder="e.g. Phone mount for car vent, replacement fridge handle...">
+        </div>
+        <div class="ws-wizard-nav">
+          <div></div>
+          <button class="btn btn-primary" id="ws-wizard-next-0">Next: Measurements</button>
+        </div>
+      </div>
+
+      <!-- Step 1: Measurement checklist -->
+      <div class="ws-wizard-panel" id="ws-wizard-step-1">
+        <h3 class="ws-wizard-panel-title">Take Your Measurements</h3>
+
+        <!-- Inner vs outer explanation -->
+        <div class="ws-measure-tip card mb-md" style="background: var(--bg-secondary);">
+          <div class="card-title text-sm">Inner vs. Outer Dimensions</div>
+          <div class="ws-inner-outer-demo">
+            <div class="ws-io-box">
+              <div class="ws-io-outer">
+                <span class="ws-io-label-outer">Outer</span>
+                <div class="ws-io-inner">
+                  <span class="ws-io-label-inner">Inner</span>
+                </div>
+              </div>
+            </div>
+            <div class="ws-io-text text-sm text-muted">
+              <p><strong>Outer dimension:</strong> The total external size of an object. Measure this when something needs to fit <em>around</em> your part.</p>
+              <p><strong>Inner dimension:</strong> The space inside a cavity or opening. Measure this when something needs to fit <em>inside</em> your part.</p>
+              <p><strong>Key:</strong> Inner dimensions = outer dimension minus (2 x wall thickness).</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="ws-measure-checklist">
+          <!-- Populated by JS based on project type -->
+        </div>
+
+        <div class="ws-wizard-nav">
+          <button class="btn btn-secondary" id="ws-wizard-back-1">Back</button>
+          <button class="btn btn-primary" id="ws-wizard-next-1">Next: Tolerances</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Tolerance tips -->
+      <div class="ws-wizard-panel" id="ws-wizard-step-2">
+        <h3 class="ws-wizard-panel-title">Apply Tolerances</h3>
+
+        <div class="ws-tolerance-tips">
+          <div class="ws-tol-tip-card card" style="background:var(--bg-secondary);">
+            <div class="card-title text-sm">How tight should the fit be?</div>
+            <div class="form-group mt-sm">
+              <label class="form-label">Fit Type</label>
+              <select class="form-select" id="ws-measure-fit">
+                <option value="press">Press fit (tight, friction hold)</option>
+                <option value="snug" selected>Snug / sliding fit (smooth movement)</option>
+                <option value="loose">Loose / clearance (easy assembly)</option>
+              </select>
+            </div>
+            <div id="ws-tolerance-recommendation" class="text-sm mt-sm">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <div class="ws-tol-tip-card card mt-sm" style="background:var(--bg-secondary);">
+            <div class="card-title text-sm">Material Shrinkage Compensation</div>
+            <div class="form-group mt-sm">
+              <label class="form-label">Printing Material</label>
+              <select class="form-select" id="ws-measure-material">
+                <option value="pla">PLA (low shrinkage: ~0.3%)</option>
+                <option value="petg">PETG (low shrinkage: ~0.4%)</option>
+                <option value="abs">ABS (high shrinkage: ~0.7%)</option>
+                <option value="asa">ASA (high shrinkage: ~0.6%)</option>
+                <option value="nylon">Nylon (high shrinkage: ~1.5%)</option>
+                <option value="tpu">TPU (very low shrinkage: ~0.2%)</option>
+              </select>
+            </div>
+            <div id="ws-shrinkage-note" class="text-sm mt-sm text-muted"></div>
+          </div>
+        </div>
+
+        <div class="ws-wizard-nav mt-md">
+          <button class="btn btn-secondary" id="ws-wizard-back-2">Back</button>
+          <button class="btn btn-primary" id="ws-wizard-next-2">Generate Spec Sheet</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Spec sheet output -->
+      <div class="ws-wizard-panel" id="ws-wizard-step-3">
+        <h3 class="ws-wizard-panel-title">Your Specification Sheet</h3>
+        <div id="ws-spec-sheet" class="ws-spec-sheet">
+          <!-- Generated by JS -->
+        </div>
+        <div class="ws-wizard-nav mt-md">
+          <button class="btn btn-secondary" id="ws-wizard-back-3">Back</button>
+          <button class="btn btn-success" id="ws-wizard-copy-spec">Copy to Clipboard</button>
+          <button class="btn btn-primary" id="ws-wizard-restart">Start Over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: STL Fix ========== -->
+  <div class="tab-panel" id="ws-tab-stlfix">
+    <p class="text-sm text-muted mb-md">Drop a binary STL file to analyze its mesh for common problems. Useful for diagnosing print failures caused by bad geometry.</p>
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="ws-stl-dropzone">
+      <div class="drop-zone-icon">&#x1F4C1;</div>
+      <div>Drop a binary STL file here or <strong>click to browse</strong></div>
+      <div class="text-sm text-muted mt-sm">Supports binary .stl files (ASCII STL not yet supported)</div>
+    </div>
+    <input type="file" id="ws-stl-file-input" accept=".stl" style="display:none;">
+
+    <!-- File info -->
+    <div id="ws-stl-fileinfo" class="card mt-md hidden">
+      <div class="card-header">
+        <div>
+          <div class="card-title" id="ws-stl-filename">filename.stl</div>
+          <div class="card-subtitle" id="ws-stl-filesize">0 KB</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="ws-stl-clear">Clear</button>
+      </div>
+
+      <!-- Analysis progress -->
+      <div id="ws-stl-analyzing" class="ws-stl-analyzing hidden">
+        <div class="ws-stl-spinner"></div>
+        <span>Analyzing mesh...</span>
+      </div>
+
+      <!-- Diagnostic results -->
+      <div id="ws-stl-results" class="hidden">
+        <div class="ws-stl-summary grid-3 mb-md">
+          <div class="ws-stl-stat">
+            <div class="stat-value" id="ws-stl-triangles">0</div>
+            <div class="stat-label">Triangles</div>
+          </div>
+          <div class="ws-stl-stat">
+            <div class="stat-value" id="ws-stl-vertices">0</div>
+            <div class="stat-label">Unique Vertices</div>
+          </div>
+          <div class="ws-stl-stat">
+            <div class="stat-value" id="ws-stl-bbox">-</div>
+            <div class="stat-label">Bounding Box (mm)</div>
+          </div>
+        </div>
+
+        <div class="ws-stl-checks" id="ws-stl-checks">
+          <!-- Diagnostic rows populated by JS -->
+        </div>
+
+        <!-- Before/After stats (shown after repair) -->
+        <div id="ws-stl-repair-section" class="mt-md hidden">
+          <div class="ws-stl-repair-stats grid-2">
+            <div class="card" style="background:var(--bg-secondary);">
+              <div class="card-title text-sm">Before</div>
+              <div id="ws-stl-before-stats" class="text-sm mt-sm"></div>
+            </div>
+            <div class="card" style="background:var(--bg-secondary);">
+              <div class="card-title text-sm">After</div>
+              <div id="ws-stl-after-stats" class="text-sm mt-sm"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: CAD Links ========== -->
+  <div class="tab-panel" id="ws-tab-cadlinks">
+    <p class="text-sm text-muted mb-md">Free and beginner-friendly CAD tools for 3D printing. Start with TinkerCAD, graduate to Fusion 360 or OpenSCAD as you grow.</p>
+
+    <div class="grid-2" id="ws-cad-grid">
+
+      <div class="card ws-cad-card">
+        <div class="ws-cad-header">
+          <div class="ws-cad-icon" style="background: #FF6B35;">T</div>
+          <div>
+            <div class="ws-cad-name">TinkerCAD</div>
+            <div class="ws-cad-maker text-sm text-muted">Autodesk &middot; Free &middot; Browser-based</div>
+          </div>
+          <span class="tag tag-success">Start Here</span>
+        </div>
+        <p class="ws-cad-desc">The easiest 3D modeling tool for beginners. Drag and drop shapes, combine them with boolean operations. No install needed, works entirely in your browser. Exports directly to STL.</p>
+        <div class="ws-cad-tips">
+          <div class="ws-cad-tips-title">Beginner Tips</div>
+          <ul class="ws-cad-tips-list">
+            <li>Use the Align tool to center shapes precisely</li>
+            <li>Hold Shift while dragging to constrain movement</li>
+            <li>Group objects (Ctrl+G) to combine or cut shapes</li>
+            <li>Change the Workplane by placing it on faces of existing objects</li>
+          </ul>
+        </div>
+        <div class="ws-cad-projects">
+          <div class="ws-cad-projects-title">Starter Projects</div>
+          <div class="ws-cad-project-list">
+            <span class="tag">Keychain tag</span>
+            <span class="tag">Name plate</span>
+            <span class="tag">Simple box</span>
+            <span class="tag">Phone stand</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-primary btn-sm ws-cad-link" data-url="https://www.tinkercad.com">Open TinkerCAD</a>
+      </div>
+
+      <div class="card ws-cad-card">
+        <div class="ws-cad-header">
+          <div class="ws-cad-icon" style="background: #F57C00;">F</div>
+          <div>
+            <div class="ws-cad-name">Fusion 360</div>
+            <div class="ws-cad-maker text-sm text-muted">Autodesk &middot; Free for personal use</div>
+          </div>
+          <span class="tag">Intermediate</span>
+        </div>
+        <p class="ws-cad-desc">Professional-grade parametric CAD with a generous free tier. Sketch-based modeling lets you create precise, editable designs. Includes simulation, rendering, and CAM toolpaths.</p>
+        <div class="ws-cad-tips">
+          <div class="ws-cad-tips-title">Beginner Tips</div>
+          <ul class="ws-cad-tips-list">
+            <li>Learn Sketch + Extrude first — it covers 80% of simple parts</li>
+            <li>Use Parameters (Modify &gt; Change Parameters) to make designs adjustable</li>
+            <li>Add Fillets last — they complicate edits if added too early</li>
+            <li>Use the Timeline at the bottom to go back and edit any operation</li>
+          </ul>
+        </div>
+        <div class="ws-cad-projects">
+          <div class="ws-cad-projects-title">Starter Projects</div>
+          <div class="ws-cad-project-list">
+            <span class="tag">Parametric box</span>
+            <span class="tag">Shelf bracket</span>
+            <span class="tag">Replacement knob</span>
+            <span class="tag">Enclosure</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-primary btn-sm ws-cad-link" data-url="https://www.autodesk.com/products/fusion-360/personal">Open Fusion 360</a>
+      </div>
+
+      <div class="card ws-cad-card">
+        <div class="ws-cad-header">
+          <div class="ws-cad-icon" style="background: #FFDD00; color: #333;">&#x2B23;</div>
+          <div>
+            <div class="ws-cad-name">OpenSCAD</div>
+            <div class="ws-cad-maker text-sm text-muted">Open source &middot; Free &middot; Code-based</div>
+          </div>
+          <span class="tag">For Programmers</span>
+        </div>
+        <p class="ws-cad-desc">Write code to create 3D models. If you think in code, this is your tool. Parametric by nature — change a variable and the whole model updates. Perfect for generating families of parts or highly customizable designs.</p>
+        <div class="ws-cad-tips">
+          <div class="ws-cad-tips-title">Beginner Tips</div>
+          <ul class="ws-cad-tips-list">
+            <li>Start with cube(), cylinder(), sphere() and difference()/union()</li>
+            <li>Use $fn=64 or higher for smooth curves</li>
+            <li>Define all dimensions as variables at the top of the file</li>
+            <li>Use modules (functions) to create reusable components</li>
+          </ul>
+        </div>
+        <div class="ws-cad-projects">
+          <div class="ws-cad-projects-title">Starter Projects</div>
+          <div class="ws-cad-project-list">
+            <span class="tag">Parametric box generator</span>
+            <span class="tag">Hex grid</span>
+            <span class="tag">Custom washer</span>
+            <span class="tag">Gear generator</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-primary btn-sm ws-cad-link" data-url="https://openscad.org/downloads.html">Download OpenSCAD</a>
+      </div>
+
+      <div class="card ws-cad-card">
+        <div class="ws-cad-header">
+          <div class="ws-cad-icon" style="background: #3D85C6;">FC</div>
+          <div>
+            <div class="ws-cad-name">FreeCAD</div>
+            <div class="ws-cad-maker text-sm text-muted">Open source &middot; Free &middot; Desktop app</div>
+          </div>
+          <span class="tag">Full Featured</span>
+        </div>
+        <p class="ws-cad-desc">A full open-source parametric CAD suite. More complex than Fusion 360 to learn, but fully free with no account needed. Active community and constant development. Best for users who want full control without cloud dependency.</p>
+        <div class="ws-cad-tips">
+          <div class="ws-cad-tips-title">Beginner Tips</div>
+          <ul class="ws-cad-tips-list">
+            <li>Use the Part Design workbench for 3D-printing-focused modeling</li>
+            <li>Learn Sketch + Pad (extrude) + Pocket (cut) as your core tools</li>
+            <li>Name your features and sketches for clarity — the model tree is key</li>
+            <li>Use the Spreadsheet workbench for parametric dimensions</li>
+          </ul>
+        </div>
+        <div class="ws-cad-projects">
+          <div class="ws-cad-projects-title">Starter Projects</div>
+          <div class="ws-cad-project-list">
+            <span class="tag">Simple bracket</span>
+            <span class="tag">Threading (Fasteners WB)</span>
+            <span class="tag">Multi-body assembly</span>
+            <span class="tag">Enclosure with bosses</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-primary btn-sm ws-cad-link" data-url="https://www.freecad.org/downloads.php">Download FreeCAD</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

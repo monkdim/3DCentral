@@ -1,0 +1,468 @@
+/* Optimizer Module Styles */
+
+/* ---- Section Labels ---- */
+
+.opt-section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---- Profile Recipe Cards ---- */
+
+.opt-profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.opt-profile-card:hover {
+  border-color: var(--border-light);
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+.opt-profile-card.opt-builtin {
+  border-left: 3px solid var(--accent);
+}
+
+.opt-profile-card.opt-custom {
+  border-left: 3px solid var(--success);
+}
+
+.opt-profile-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.opt-profile-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.opt-profile-card-usecase {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.opt-profile-card-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.opt-badge-builtin {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+
+.opt-badge-custom {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.opt-profile-card-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 12px;
+}
+
+.opt-profile-setting {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.opt-profile-setting-label {
+  color: var(--text-muted);
+}
+
+.opt-profile-setting-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.opt-profile-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.opt-profile-card-notes {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.opt-profile-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.opt-profile-card-actions .btn {
+  flex: 1;
+  justify-content: center;
+  padding: 5px 8px;
+  font-size: 11px;
+}
+
+.opt-profile-card-printer {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---- Compare Layout ---- */
+
+.opt-compare-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .opt-compare-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.opt-compare-controls {
+  position: sticky;
+  top: 0;
+}
+
+.opt-slider-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 40px;
+  text-align: right;
+}
+
+.opt-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.opt-compare-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opt-impact-card {
+  padding: 16px 20px;
+}
+
+.opt-impact-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.opt-impact-icon {
+  font-size: 18px;
+}
+
+.opt-impact-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.opt-impact-bar {
+  height: 10px;
+  border-radius: 5px;
+}
+
+.opt-impact-bar .progress-fill {
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.opt-impact-value {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+.opt-compare-summary {
+  background: var(--bg-tertiary);
+  border-color: var(--accent);
+}
+
+/* ---- Strength Estimator Layout ---- */
+
+.opt-strength-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .opt-strength-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.opt-strength-form {
+  position: sticky;
+  top: 0;
+}
+
+.opt-strength-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.opt-str-result-card {
+  text-align: center;
+  padding: 24px;
+}
+
+/* Strength meter - horizontal bar */
+.opt-str-meter-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.opt-str-meter {
+  flex: 1;
+  height: 24px;
+  background: var(--bg-input);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.opt-str-meter-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease, background-color 0.3s ease;
+  background: linear-gradient(90deg, var(--danger) 0%, var(--warning) 40%, var(--success) 100%);
+  width: 0%;
+}
+
+.opt-str-score-label {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 60px;
+  font-family: var(--font-mono);
+}
+
+.opt-str-rating-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* ---- Infill Pattern Cards ---- */
+
+.opt-infill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opt-infill-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.opt-infill-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.opt-infill-ascii {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--accent);
+  white-space: pre;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.opt-infill-ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.opt-infill-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.opt-infill-rating-label {
+  color: var(--text-muted);
+}
+
+.opt-infill-rating-stars {
+  color: var(--warning);
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+.opt-infill-usecases {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.opt-infill-usecases strong {
+  color: var(--text-primary);
+}
+
+.opt-infill-compat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ---- Troubleshooter ---- */
+
+.opt-ts-issue-icon {
+  font-size: 24px;
+}
+
+.opt-ts-section {
+  margin-bottom: 16px;
+}
+
+.opt-ts-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.opt-ts-list {
+  list-style: none;
+  padding: 0;
+}
+
+.opt-ts-list li {
+  position: relative;
+  padding: 6px 0 6px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.opt-ts-list li::before {
+  content: "\2022";
+  position: absolute;
+  left: 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Step cards */
+.opt-ts-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.opt-ts-step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.opt-ts-step-content {
+  flex: 1;
+}
+
+.opt-ts-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.opt-ts-step-detail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.opt-ts-step-detail code {
+  background: var(--bg-primary);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+}

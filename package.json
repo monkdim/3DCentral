@@ -1,0 +1,25 @@
+{
+  "name": "printhq",
+  "version": "1.0.0",
+  "description": "PrintHQ — Unified 3D Printing Companion App for Bambu Lab A1 & Anycubic Kobra S1",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": [
+    "3d-printing",
+    "electron",
+    "bambu-lab",
+    "anycubic",
+    "gcode"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^40.2.1"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
+}

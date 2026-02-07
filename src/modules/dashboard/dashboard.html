@@ -1,0 +1,410 @@
+<!-- Dashboard Module — Central hub for PrintHQ -->
+
+<!-- Printer Status Cards -->
+<section class="dash-section">
+  <h2 class="dash-section-title">Printer Status</h2>
+  <div class="grid-2">
+
+    <!-- Bambu Lab A1 Combo -->
+    <div class="card printer-card" data-printer="bambu_a1" id="printer-card-bambu_a1">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Bambu Lab A1 Combo</div>
+          <div class="card-subtitle">LiDAR &middot; AMS Lite (4 slots) &middot; 256mm&sup3;</div>
+        </div>
+        <div class="printer-status-toggle">
+          <span class="status-dot status-idle" id="status-dot-bambu_a1"></span>
+          <select class="form-select printer-status-select" id="status-select-bambu_a1" data-printer="bambu_a1">
+            <option value="idle">Idle</option>
+            <option value="printing">Printing</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+      </div>
+      <div class="printer-stats grid-3">
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-total-bambu_a1">0</div>
+          <div class="stat-label">Total Prints</div>
+        </div>
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-rate-bambu_a1">0%</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-hours-bambu_a1">0h</div>
+          <div class="stat-label">Hours Logged</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anycubic Kobra S1 Combo -->
+    <div class="card printer-card" data-printer="kobra_s1" id="printer-card-kobra_s1">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Anycubic Kobra S1 Combo</div>
+          <div class="card-subtitle">Dual Ace Pro &middot; 8 slots &middot; 220mm&sup3;</div>
+        </div>
+        <div class="printer-status-toggle">
+          <span class="status-dot status-idle" id="status-dot-kobra_s1"></span>
+          <select class="form-select printer-status-select" id="status-select-kobra_s1" data-printer="kobra_s1">
+            <option value="idle">Idle</option>
+            <option value="printing">Printing</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+      </div>
+      <div class="printer-stats grid-3">
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-total-kobra_s1">0</div>
+          <div class="stat-label">Total Prints</div>
+        </div>
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-rate-kobra_s1">0%</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="printer-stat">
+          <div class="stat-value" id="stat-hours-kobra_s1">0h</div>
+          <div class="stat-label">Hours Logged</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Quick Actions Bar -->
+<section class="dash-section">
+  <div class="quick-actions">
+    <button class="btn btn-primary" id="btn-log-print">
+      <span>&#x2795;</span> Log a Print
+    </button>
+    <button class="btn btn-secondary" id="btn-start-timer">
+      <span>&#x23F1;</span> Start Timer
+    </button>
+    <button class="btn btn-secondary" id="btn-add-filament">
+      <span>&#x1F9F5;</span> Add Filament
+    </button>
+  </div>
+</section>
+
+<!-- Print Queue -->
+<section class="dash-section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Print Queue</div>
+      <span class="badge" id="queue-count">0</span>
+    </div>
+    <div id="queue-list">
+      <div class="empty-state" id="queue-empty">
+        <div class="empty-state-icon">&#x1F4CB;</div>
+        <div class="empty-state-title">No prints in queue</div>
+        <div class="empty-state-text">Start a timer to track active prints and see them here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Print History -->
+<section class="dash-section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Print History</div>
+      <div class="history-actions">
+        <input type="text" class="form-input history-search" id="history-search" placeholder="Search prints..." />
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="history-filters" id="history-filters">
+      <div class="filter-group">
+        <label class="form-label">Printer</label>
+        <select class="form-select filter-select" id="filter-printer">
+          <option value="">All Printers</option>
+          <option value="bambu_a1">Bambu Lab A1</option>
+          <option value="kobra_s1">Kobra S1</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="form-label">Material</label>
+        <select class="form-select filter-select" id="filter-material">
+          <option value="">All Materials</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="form-label">Status</label>
+        <select class="form-select filter-select" id="filter-status">
+          <option value="">All Statuses</option>
+          <option value="success">Success</option>
+          <option value="failed">Failed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="form-label">From</label>
+        <input type="date" class="form-input filter-date" id="filter-date-from" />
+      </div>
+      <div class="filter-group">
+        <label class="form-label">To</label>
+        <input type="date" class="form-input filter-date" id="filter-date-to" />
+      </div>
+      <div class="filter-group">
+        <label class="form-label">Tags</label>
+        <input type="text" class="form-input filter-tags" id="filter-tags" placeholder="e.g. functional" />
+      </div>
+      <div class="filter-group">
+        <label class="form-label">Min Rating</label>
+        <select class="form-select filter-select" id="filter-rating">
+          <option value="">Any</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="filter-group filter-group-action">
+        <button class="btn btn-sm btn-secondary" id="btn-clear-filters">Clear Filters</button>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="table-container">
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Printer</th>
+            <th>Material</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Rating</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-state hidden" id="history-empty">
+      <div class="empty-state-icon">&#x1F4DA;</div>
+      <div class="empty-state-title">No print history yet</div>
+      <div class="empty-state-text">Log your first print to start building your history.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MODALS ========== -->
+
+<!-- Log a Print Modal -->
+<div class="modal-overlay" id="modal-log-print">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">Log a Print</div>
+      <button class="modal-close" data-close="modal-log-print">&times;</button>
+    </div>
+    <form id="form-log-print" autocomplete="off">
+
+      <!-- Basic Info -->
+      <div class="form-row">
+        <div class="form-group" style="flex:2">
+          <label class="form-label" for="log-name">Print Name *</label>
+          <input type="text" class="form-input" id="log-name" required placeholder="e.g. Phone Stand v2" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="log-printer">Printer *</label>
+          <select class="form-select" id="log-printer" required>
+            <option value="">Select printer...</option>
+            <option value="bambu_a1">Bambu Lab A1 Combo</option>
+            <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="log-status">Status *</label>
+          <select class="form-select" id="log-status" required>
+            <option value="success">Success</option>
+            <option value="failed">Failed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group" id="failure-reason-group" style="display:none">
+          <label class="form-label" for="log-failure-reason">Failure Reason</label>
+          <select class="form-select" id="log-failure-reason">
+            <option value="">Select reason...</option>
+            <option value="adhesion">Adhesion Failure</option>
+            <option value="stringing">Stringing</option>
+            <option value="layer_shift">Layer Shift</option>
+            <option value="spaghetti">Spaghetti</option>
+            <option value="clog">Nozzle Clog</option>
+            <option value="warping">Warping</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Material & Filament -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Material(s) *</label>
+          <div class="material-multi-select" id="log-material-container">
+            <!-- Populated dynamically from filament inventory -->
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="log-filament-used">Filament Used (g) *</label>
+          <input type="number" class="form-input" id="log-filament-used" required min="0" step="0.1" placeholder="e.g. 45.2" />
+        </div>
+      </div>
+
+      <!-- Time -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="log-print-hours">Print Time (hours)</label>
+          <input type="number" class="form-input" id="log-print-hours" min="0" step="1" placeholder="0" value="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="log-print-minutes">Print Time (minutes)</label>
+          <input type="number" class="form-input" id="log-print-minutes" min="0" max="59" step="1" placeholder="0" value="0" />
+        </div>
+      </div>
+
+      <!-- Print Settings (collapsible) -->
+      <div class="form-section-toggle" id="toggle-settings">
+        <span class="toggle-arrow" id="settings-arrow">&#x25B6;</span>
+        Print Settings
+      </div>
+      <div class="form-section-collapsible" id="settings-section" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="log-layer-height">Layer Height (mm)</label>
+            <input type="number" class="form-input" id="log-layer-height" min="0.04" max="0.6" step="0.02" value="0.20" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-infill">Infill (%)</label>
+            <input type="number" class="form-input" id="log-infill" min="0" max="100" step="5" value="20" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-infill-pattern">Infill Pattern</label>
+            <select class="form-select" id="log-infill-pattern">
+              <option value="grid">Grid</option>
+              <option value="gyroid">Gyroid</option>
+              <option value="honeycomb">Honeycomb</option>
+              <option value="triangles">Triangles</option>
+              <option value="cubic">Cubic</option>
+              <option value="lines">Lines</option>
+              <option value="rectilinear">Rectilinear</option>
+              <option value="lightning">Lightning</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="log-wall-count">Wall Count</label>
+            <input type="number" class="form-input" id="log-wall-count" min="1" max="10" step="1" value="3" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-top-layers">Top Layers</label>
+            <input type="number" class="form-input" id="log-top-layers" min="1" max="20" step="1" value="4" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-bottom-layers">Bottom Layers</label>
+            <input type="number" class="form-input" id="log-bottom-layers" min="1" max="20" step="1" value="4" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="log-support-type">Support Type</label>
+            <select class="form-select" id="log-support-type">
+              <option value="none">None</option>
+              <option value="normal">Normal</option>
+              <option value="tree">Tree</option>
+              <option value="organic">Organic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-bed-temp">Bed Temp (&deg;C)</label>
+            <input type="number" class="form-input" id="log-bed-temp" min="0" max="120" step="5" value="60" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="log-nozzle-temp">Nozzle Temp (&deg;C)</label>
+            <input type="number" class="form-input" id="log-nozzle-temp" min="170" max="300" step="5" value="210" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="log-speed">Speed (mm/s)</label>
+            <input type="number" class="form-input" id="log-speed" min="10" max="600" step="10" value="250" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes, Rating, Tags -->
+      <div class="form-group mt-md">
+        <label class="form-label" for="log-notes">Notes</label>
+        <textarea class="form-textarea" id="log-notes" rows="2" placeholder="How did it turn out?"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Rating</label>
+          <div class="rating" id="log-rating">
+            <span class="star">&#x2606;</span>
+            <span class="star">&#x2606;</span>
+            <span class="star">&#x2606;</span>
+            <span class="star">&#x2606;</span>
+            <span class="star">&#x2606;</span>
+          </div>
+        </div>
+        <div class="form-group" style="flex:2">
+          <label class="form-label" for="log-tags">Tags (comma separated)</label>
+          <input type="text" class="form-input" id="log-tags" placeholder="e.g. functional, phone, gift" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close="modal-log-print">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Print</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Start Timer Modal -->
+<div class="modal-overlay" id="modal-start-timer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Start Print Timer</div>
+      <button class="modal-close" data-close="modal-start-timer">&times;</button>
+    </div>
+    <form id="form-start-timer" autocomplete="off">
+      <div class="form-group">
+        <label class="form-label" for="timer-name">Print Name *</label>
+        <input type="text" class="form-input" id="timer-name" required placeholder="e.g. Benchy" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="timer-printer">Printer</label>
+        <select class="form-select" id="timer-printer">
+          <option value="bambu_a1">Bambu Lab A1 Combo</option>
+          <option value="kobra_s1">Anycubic Kobra S1 Combo</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="timer-hours">Hours</label>
+          <input type="number" class="form-input" id="timer-hours" min="0" max="99" step="1" value="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="timer-minutes">Minutes</label>
+          <input type="number" class="form-input" id="timer-minutes" min="0" max="59" step="1" value="30" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close="modal-start-timer">Cancel</button>
+        <button type="submit" class="btn btn-primary">Start Timer</button>
+      </div>
+    </form>
+  </div>
+</div>

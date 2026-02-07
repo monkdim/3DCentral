@@ -1,0 +1,434 @@
+<!-- Analytics & Insights Module -->
+<div id="analytics-module">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Analytics &amp; Insights</h2>
+      <p class="text-sm text-muted">Deep-dive into your printing performance, costs, and progress</p>
+    </div>
+    <div class="flex items-center gap-sm">
+      <select class="form-select" id="ana-time-range" style="width:160px;">
+        <option value="all">All Time</option>
+        <option value="7d">Last 7 Days</option>
+        <option value="30d">Last 30 Days</option>
+        <option value="90d">Last 90 Days</option>
+        <option value="6m">Last 6 Months</option>
+        <option value="1y">Last Year</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" id="ana-btn-refresh" title="Refresh data">&#x21BB; Refresh</button>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="ana-tab-bar">
+    <button class="tab-btn active" data-tab="ana-tab-overview">Overview</button>
+    <button class="tab-btn" data-tab="ana-tab-failures">Failures</button>
+    <button class="tab-btn" data-tab="ana-tab-costs">Costs</button>
+    <button class="tab-btn" data-tab="ana-tab-progress">Progress</button>
+  </div>
+
+  <!-- ========== TAB: Overview ========== -->
+  <div class="tab-panel active" id="ana-tab-overview">
+
+    <!-- Top-level stats -->
+    <div class="grid-4 mb-md" id="ana-overview-stats">
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon">&#x1F5A8;</div>
+        <div class="stat-value" id="ana-stat-total-prints">0</div>
+        <div class="stat-label">Total Prints</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-success">&#x2714;</div>
+        <div class="stat-value" id="ana-stat-success-rate">0%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-time">&#x23F1;</div>
+        <div class="stat-value" id="ana-stat-total-hours">0h</div>
+        <div class="stat-label">Total Hours</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-filament">&#x1F9F5;</div>
+        <div class="stat-value" id="ana-stat-total-filament">0g</div>
+        <div class="stat-label">Filament Used</div>
+      </div>
+    </div>
+
+    <!-- Secondary quick stats row -->
+    <div class="grid-4 mb-md">
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Successful</div>
+        <div class="ana-mini-value text-success" id="ana-stat-success-count">0</div>
+      </div>
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Failed</div>
+        <div class="ana-mini-value text-danger" id="ana-stat-fail-count">0</div>
+      </div>
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Cancelled</div>
+        <div class="ana-mini-value text-warning" id="ana-stat-cancel-count">0</div>
+      </div>
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Avg Print Time</div>
+        <div class="ana-mini-value text-accent" id="ana-stat-avg-time">0m</div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1: Timeline + Success Trend -->
+    <div class="grid-2 mb-md">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Prints Over Time</div>
+          <div class="card-subtitle">Monthly print volume</div>
+        </div>
+        <div class="ana-chart-container" id="chart-prints-timeline"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Success Rate Trend</div>
+          <div class="card-subtitle">Monthly success percentage</div>
+        </div>
+        <div class="ana-chart-container" id="chart-success-trend"></div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2: Material Pie + Printer Comparison -->
+    <div class="grid-2 mb-md">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Material Usage</div>
+          <div class="card-subtitle">Distribution by material type</div>
+        </div>
+        <div class="ana-chart-container ana-chart-pie-container" id="chart-material-pie"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Printer Comparison</div>
+          <div class="card-subtitle">Prints and success rate by printer</div>
+        </div>
+        <div class="ana-chart-container" id="chart-printer-comparison"></div>
+      </div>
+    </div>
+
+    <!-- Breakdown: By Printer -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Breakdown by Printer</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Printer</th>
+              <th>Total Prints</th>
+              <th>Success</th>
+              <th>Failed</th>
+              <th>Cancelled</th>
+              <th>Success Rate</th>
+              <th>Total Hours</th>
+              <th>Filament (g)</th>
+            </tr>
+          </thead>
+          <tbody id="ana-breakdown-printer-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Breakdown: By Material -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Breakdown by Material</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Total Prints</th>
+              <th>Success</th>
+              <th>Failed</th>
+              <th>Success Rate</th>
+              <th>Avg Time</th>
+              <th>Total Filament (g)</th>
+            </tr>
+          </thead>
+          <tbody id="ana-breakdown-material-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Failures ========== -->
+  <div class="tab-panel" id="ana-tab-failures">
+
+    <!-- Failure summary stats -->
+    <div class="grid-4 mb-md">
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-danger">&#x26A0;</div>
+        <div class="stat-value" id="ana-fail-total">0</div>
+        <div class="stat-label">Total Failures</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon">&#x1F4C9;</div>
+        <div class="stat-value" id="ana-fail-rate">0%</div>
+        <div class="stat-label">Failure Rate</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-time">&#x23F3;</div>
+        <div class="stat-value" id="ana-fail-wasted-hours">0h</div>
+        <div class="stat-label">Hours Wasted</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-filament">&#x1F5D1;</div>
+        <div class="stat-value" id="ana-fail-wasted-filament">0g</div>
+        <div class="stat-label">Filament Wasted</div>
+      </div>
+    </div>
+
+    <!-- Failure reasons chart + list -->
+    <div class="grid-2 mb-md">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Most Common Failure Reasons</div>
+        </div>
+        <div class="ana-chart-container" id="chart-failure-reasons"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Failure Reasons Breakdown</div>
+        </div>
+        <div id="ana-failure-reasons-list" class="ana-ranked-list"></div>
+      </div>
+    </div>
+
+    <!-- Failure correlation insights -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Failure Correlation Insights</div>
+        <div class="card-subtitle">Conditions that correlate with higher failure rates</div>
+      </div>
+      <div id="ana-failure-correlations" class="ana-insights-grid"></div>
+      <div id="ana-failure-correlations-empty" class="empty-state" style="display:none; padding:24px;">
+        <div class="empty-state-icon">&#x1F50D;</div>
+        <div class="empty-state-title">Not enough data</div>
+        <div class="empty-state-text">Log more prints with varied settings to detect failure correlations.</div>
+      </div>
+    </div>
+
+    <!-- Failure rate by printer -->
+    <div class="grid-2 mb-md">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Failure Rate by Printer</div>
+        </div>
+        <div class="ana-chart-container" id="chart-fail-by-printer"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Failure Rate by Material</div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Prints</th>
+                <th>Failures</th>
+                <th>Failure Rate</th>
+                <th>Trend</th>
+              </tr>
+            </thead>
+            <tbody id="ana-fail-by-material-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Costs ========== -->
+  <div class="tab-panel" id="ana-tab-costs">
+
+    <!-- Cost summary cards -->
+    <div class="grid-4 mb-md">
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-cost">&#x1F4B0;</div>
+        <div class="stat-value" id="ana-cost-all-time">$0</div>
+        <div class="stat-label">All-Time Filament Cost</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-cost">&#x1F4C5;</div>
+        <div class="stat-value" id="ana-cost-this-year">$0</div>
+        <div class="stat-label">This Year</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon ana-stat-icon-cost">&#x1F4C6;</div>
+        <div class="stat-value" id="ana-cost-this-month">$0</div>
+        <div class="stat-label">This Month</div>
+      </div>
+      <div class="card ana-stat-card">
+        <div class="ana-stat-icon">&#x1F4CA;</div>
+        <div class="stat-value" id="ana-cost-per-print">$0</div>
+        <div class="stat-label">Avg Cost / Successful Print</div>
+      </div>
+    </div>
+
+    <!-- Cost efficiency stats -->
+    <div class="grid-3 mb-md">
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Cost / Print Hour</div>
+        <div class="ana-mini-value" id="ana-cost-per-hour">$0</div>
+      </div>
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Avg Filament / Print</div>
+        <div class="ana-mini-value" id="ana-cost-avg-filament">0g</div>
+      </div>
+      <div class="card ana-mini-stat">
+        <div class="stat-label">Wasted on Failures</div>
+        <div class="ana-mini-value text-danger" id="ana-cost-wasted">$0</div>
+      </div>
+    </div>
+
+    <!-- Cost per printer breakdown -->
+    <div class="grid-2 mb-md">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cost by Printer</div>
+        </div>
+        <div class="ana-chart-container" id="chart-cost-by-printer"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cost by Material</div>
+        </div>
+        <div class="ana-chart-container" id="chart-cost-by-material"></div>
+      </div>
+    </div>
+
+    <!-- Monthly cost trend -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Monthly Filament Spending</div>
+        <div class="card-subtitle">Spool purchases over time</div>
+      </div>
+      <div class="ana-chart-container" id="chart-monthly-cost"></div>
+    </div>
+
+    <!-- Cost per printer table -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Cost Breakdown by Printer</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Printer</th>
+              <th>Prints</th>
+              <th>Filament Used (g)</th>
+              <th>Est. Cost</th>
+              <th>Avg Cost / Print</th>
+              <th>Cost / Hour</th>
+            </tr>
+          </thead>
+          <tbody id="ana-cost-printer-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: Progress ========== -->
+  <div class="tab-panel" id="ana-tab-progress">
+
+    <!-- Skill Progression -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Skill Progression</div>
+        <div class="card-subtitle">Your success rate improvement over time</div>
+      </div>
+      <div class="grid-3 mb-md" id="ana-skill-stats">
+        <div class="ana-skill-card">
+          <div class="ana-skill-period">First Month</div>
+          <div class="ana-skill-rate" id="ana-skill-first-month">--</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="ana-skill-card">
+          <div class="ana-skill-period">Recent (Last 30 Days)</div>
+          <div class="ana-skill-rate" id="ana-skill-recent">--</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="ana-skill-card ana-skill-card-highlight">
+          <div class="ana-skill-period">Improvement</div>
+          <div class="ana-skill-rate" id="ana-skill-improvement">--</div>
+          <div class="stat-label">Percentage Points</div>
+        </div>
+      </div>
+      <div class="ana-chart-container" id="chart-skill-progression"></div>
+    </div>
+
+    <!-- Milestones -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Milestones Achieved</div>
+        <div class="card-subtitle">Celebrate your 3D printing journey</div>
+      </div>
+      <div id="ana-milestones-grid" class="ana-milestones-grid"></div>
+      <div id="ana-milestones-empty" class="empty-state" style="display:none; padding:24px;">
+        <div class="empty-state-icon">&#x1F3C6;</div>
+        <div class="empty-state-title">No milestones yet</div>
+        <div class="empty-state-text">Start logging prints to unlock milestones.</div>
+      </div>
+    </div>
+
+    <!-- Usage Patterns -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Usage Patterns</div>
+        <div class="card-subtitle">What, when, and how you print</div>
+      </div>
+      <div class="grid-2 mb-md">
+        <!-- Most used materials -->
+        <div class="ana-pattern-section">
+          <h4 class="ana-pattern-title">Most Used Materials</h4>
+          <div id="ana-pattern-materials" class="ana-ranked-list"></div>
+        </div>
+        <!-- Most printed categories -->
+        <div class="ana-pattern-section">
+          <h4 class="ana-pattern-title">Most Common Tags</h4>
+          <div id="ana-pattern-tags" class="ana-ranked-list"></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="ana-pattern-stat-card">
+          <div class="stat-label">Average Print Time</div>
+          <div class="ana-pattern-stat-value" id="ana-pattern-avg-time">--</div>
+        </div>
+        <div class="ana-pattern-stat-card">
+          <div class="stat-label">Average Filament / Print</div>
+          <div class="ana-pattern-stat-value" id="ana-pattern-avg-filament">--</div>
+        </div>
+        <div class="ana-pattern-stat-card">
+          <div class="stat-label">Busiest Day</div>
+          <div class="ana-pattern-stat-value" id="ana-pattern-busiest-day">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Print heatmap by day of week -->
+    <div class="card mb-md">
+      <div class="card-header">
+        <div class="card-title">Printing Activity by Day</div>
+        <div class="card-subtitle">Which days you print the most</div>
+      </div>
+      <div class="ana-chart-container" id="chart-day-heatmap"></div>
+    </div>
+  </div>
+
+  <!-- Empty state (shown if no prints exist at all) -->
+  <div id="ana-empty-state" class="empty-state" style="display:none;">
+    <div class="empty-state-icon">&#x1F4CA;</div>
+    <div class="empty-state-title">No analytics data yet</div>
+    <div class="empty-state-text">Log your first print from the Dashboard to start seeing insights here.</div>
+  </div>
+
+</div>

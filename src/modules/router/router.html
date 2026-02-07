@@ -1,0 +1,329 @@
+<!-- Print Router Module — Recommends which printer to use for a given job -->
+<div id="router-module">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-md">
+    <div>
+      <h2 style="font-size:18px; font-weight:700;">Print Router</h2>
+      <p class="text-sm text-muted">Analyze a print job and get a printer recommendation with detailed reasoning</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="rtr-btn-reset">Clear &amp; Reset</button>
+  </div>
+
+  <!-- ========== JOB INPUT FORM ========== -->
+  <div class="card" id="rtr-job-card">
+    <div class="card-header">
+      <div class="card-title">Job Parameters</div>
+      <div class="card-subtitle">Describe the print job to get a recommendation</div>
+    </div>
+
+    <form id="rtr-job-form" autocomplete="off">
+
+      <!-- Row 1: Name + Material -->
+      <div class="form-row">
+        <div class="form-group" style="flex:2">
+          <label class="form-label" for="rtr-job-name">Job Name (optional)</label>
+          <input type="text" class="form-input" id="rtr-job-name" placeholder="e.g. Phone Stand v3">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rtr-material">Material *</label>
+          <select class="form-select" id="rtr-material" required>
+            <option value="">Select material...</option>
+            <option value="PLA">PLA</option>
+            <option value="PLA+">PLA+</option>
+            <option value="PETG">PETG</option>
+            <option value="TPU">TPU</option>
+            <option value="ABS">ABS</option>
+            <option value="ASA">ASA</option>
+            <option value="Nylon">Nylon</option>
+            <option value="PVA">PVA</option>
+            <option value="HIPS">HIPS</option>
+            <option value="PC">PC</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Row 2: Model Dimensions -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="rtr-dim-x">Dimension X (mm) *</label>
+          <input type="number" class="form-input" id="rtr-dim-x" required min="1" max="999" step="0.1" placeholder="e.g. 120">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rtr-dim-y">Dimension Y (mm) *</label>
+          <input type="number" class="form-input" id="rtr-dim-y" required min="1" max="999" step="0.1" placeholder="e.g. 80">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rtr-dim-z">Dimension Z (mm) *</label>
+          <input type="number" class="form-input" id="rtr-dim-z" required min="1" max="999" step="0.1" placeholder="e.g. 50">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rtr-colors">Colors Needed *</label>
+          <input type="number" class="form-input" id="rtr-colors" required min="1" max="16" step="1" value="1" placeholder="1">
+        </div>
+      </div>
+
+      <!-- Row 3: Priority Sliders -->
+      <div class="rtr-priorities-section">
+        <label class="form-label">Priority Preferences</label>
+        <div class="grid-2">
+          <div class="rtr-slider-group">
+            <div class="rtr-slider-labels">
+              <span class="rtr-slider-label-left">Speed</span>
+              <span class="rtr-slider-label-right">Quality</span>
+            </div>
+            <input type="range" class="range-slider" id="rtr-priority-speed-quality" min="0" max="100" value="50">
+            <div class="rtr-slider-value" id="rtr-val-speed-quality">Balanced</div>
+          </div>
+          <div class="rtr-slider-group">
+            <div class="rtr-slider-labels">
+              <span class="rtr-slider-label-left">Strength</span>
+              <span class="rtr-slider-label-right">Surface Finish</span>
+            </div>
+            <input type="range" class="range-slider" id="rtr-priority-strength-finish" min="0" max="100" value="50">
+            <div class="rtr-slider-value" id="rtr-val-strength-finish">Balanced</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: Special Requirements Checkboxes -->
+      <div class="form-group">
+        <label class="form-label">Special Requirements</label>
+        <div class="rtr-requirements-grid">
+          <label class="form-checkbox">
+            <input type="checkbox" id="rtr-req-supports">
+            Needs Supports
+          </label>
+          <label class="form-checkbox">
+            <input type="checkbox" id="rtr-req-flexible">
+            Flexible Material
+          </label>
+          <label class="form-checkbox">
+            <input type="checkbox" id="rtr-req-hightemp">
+            High Temperature
+          </label>
+          <label class="form-checkbox">
+            <input type="checkbox" id="rtr-req-enclosed">
+            Enclosed Chamber
+          </label>
+        </div>
+      </div>
+
+      <!-- Row 5: Estimated weight (optional) -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="rtr-est-weight">Estimated Weight (g, optional)</label>
+          <input type="number" class="form-input" id="rtr-est-weight" min="0" step="0.1" placeholder="e.g. 45">
+        </div>
+        <div class="form-group" style="display:flex; align-items:flex-end;">
+          <button type="submit" class="btn btn-primary" id="rtr-btn-analyze" style="width:100%;">
+            Analyze &amp; Recommend
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ========== RECOMMENDATION OUTPUT ========== -->
+  <div id="rtr-results-area" style="display:none;">
+
+    <!-- Top Recommendation Banner -->
+    <div class="card rtr-recommendation-card" id="rtr-recommendation-banner">
+      <div class="rtr-rec-header">
+        <div class="rtr-rec-icon" id="rtr-rec-icon"></div>
+        <div class="rtr-rec-text">
+          <div class="rtr-rec-title" id="rtr-rec-title">Recommendation</div>
+          <div class="rtr-rec-printer" id="rtr-rec-printer">--</div>
+        </div>
+        <div class="rtr-rec-confidence">
+          <div class="rtr-confidence-label">Confidence</div>
+          <div class="rtr-confidence-value" id="rtr-rec-confidence">--</div>
+        </div>
+      </div>
+      <div class="rtr-rec-reasoning" id="rtr-rec-reasoning">
+        <!-- Reasoning bullet points rendered by JS -->
+      </div>
+      <div class="rtr-rec-actions">
+        <button class="btn btn-primary btn-sm" id="rtr-btn-use-recommended">Use Recommended Printer</button>
+        <button class="btn btn-secondary btn-sm" id="rtr-btn-override">Override &mdash; Use Other Printer</button>
+      </div>
+    </div>
+
+    <!-- Side-by-Side Comparison -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Side-by-Side Comparison</div>
+        <div class="card-subtitle">How each printer handles this job</div>
+      </div>
+      <div class="grid-2" id="rtr-comparison-grid">
+
+        <!-- Bambu Card -->
+        <div class="rtr-compare-card" id="rtr-compare-bambu_a1">
+          <div class="rtr-compare-header">
+            <div class="rtr-compare-name">Bambu Lab A1 Combo</div>
+            <span class="tag" id="rtr-tag-bambu_a1">--</span>
+          </div>
+          <div class="rtr-compare-body" id="rtr-compare-body-bambu_a1">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Kobra Card -->
+        <div class="rtr-compare-card" id="rtr-compare-kobra_s1">
+          <div class="rtr-compare-header">
+            <div class="rtr-compare-name">Anycubic Kobra S1 Combo</div>
+            <span class="tag" id="rtr-tag-kobra_s1">--</span>
+          </div>
+          <div class="rtr-compare-body" id="rtr-compare-body-kobra_s1">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Filament Availability -->
+    <div class="card" id="rtr-filament-card">
+      <div class="card-header">
+        <div class="card-title">Filament Availability</div>
+        <div class="card-subtitle">Loaded spools that match this job's material</div>
+      </div>
+      <div id="rtr-filament-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Similar Past Prints -->
+    <div class="card" id="rtr-history-card">
+      <div class="card-header">
+        <div class="card-title">Similar Past Prints</div>
+        <div class="card-subtitle">Previous jobs with the same material on each printer</div>
+      </div>
+      <div id="rtr-history-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== PRINTER PROFILE CONFIG ========== -->
+  <div class="card mt-md" id="rtr-profiles-section">
+    <div class="card-header">
+      <div class="card-title">Printer Profiles</div>
+      <div class="card-subtitle">Editable specs used by the recommendation engine</div>
+    </div>
+
+    <div class="grid-2" id="rtr-profiles-grid">
+
+      <!-- Bambu Profile -->
+      <div class="rtr-profile-card" id="rtr-profile-bambu_a1">
+        <h4 class="rtr-profile-name">Bambu Lab A1 Combo</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Build X (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="buildX" value="256" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Build Y (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="buildY" value="256" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Build Z (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="buildZ" value="256" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Max Speed (mm/s)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="maxSpeed" value="500" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">AMS Slots</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="amsSlots" value="4" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Nozzle (&deg;C)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="maxNozzleTemp" value="300" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Max Bed (&deg;C)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="maxBedTemp" value="100" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <label class="form-checkbox">
+                <input type="checkbox" class="rtr-profile-check" data-printer="bambu_a1" data-field="hasEnclosure">
+                Enclosed
+              </label>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supported Materials</label>
+          <input type="text" class="form-input rtr-profile-input" data-printer="bambu_a1" data-field="materials" value="PLA, PLA+, PETG, TPU, PVA, PLA-CF">
+        </div>
+      </div>
+
+      <!-- Kobra Profile -->
+      <div class="rtr-profile-card" id="rtr-profile-kobra_s1">
+        <h4 class="rtr-profile-name">Anycubic Kobra S1 Combo</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Build X (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="buildX" value="220" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Build Y (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="buildY" value="220" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Build Z (mm)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="buildZ" value="250" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Max Speed (mm/s)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="maxSpeed" value="300" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">AMS Slots</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="amsSlots" value="8" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Nozzle (&deg;C)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="maxNozzleTemp" value="300" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Max Bed (&deg;C)</label>
+            <input type="number" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="maxBedTemp" value="110" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <label class="form-checkbox">
+                <input type="checkbox" class="rtr-profile-check" data-printer="kobra_s1" data-field="hasEnclosure">
+                Enclosed
+              </label>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supported Materials</label>
+          <input type="text" class="form-input rtr-profile-input" data-printer="kobra_s1" data-field="materials" value="PLA, PLA+, PETG, TPU, ABS, ASA">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-sm" style="text-align:right;">
+      <button class="btn btn-secondary btn-sm" id="rtr-btn-reset-profiles">Reset to Defaults</button>
+      <button class="btn btn-primary btn-sm" id="rtr-btn-save-profiles">Save Profile Changes</button>
+    </div>
+  </div>
+
+</div>
